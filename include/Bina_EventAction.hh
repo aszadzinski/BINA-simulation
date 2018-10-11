@@ -7,22 +7,20 @@
 
 class Bina_EventAction : public G4UserEventAction
 {
-  public:
-    Bina_EventAction();
-    virtual ~Bina_EventAction();
+public:
+        Bina_EventAction();
+        virtual ~Bina_EventAction();
 
-  public:
-    virtual void   BeginOfEventAction(const G4Event*);
+public:
+        virtual void   BeginOfEventAction(const G4Event*);
 
-    inline static int getNb(int num = -1 )
-    {
-      static int temp;
-      if (num != -1) temp = num;
-      return temp;
-    };
+inline static int getNb(int num = -1 )
+{
+        static int temp;
+        if (num != -1) temp = num;
+        return temp;
+};
 };
 
 
 #endif
-
-

@@ -11,7 +11,7 @@
 
 class polozenia
 {
-	public:
+public:
 	G4int typ;
 	G4double x,y,z;
 	G4double rx,ry,rz;
@@ -24,7 +24,7 @@ class wymiary
 {
   public:
 
-  private:
+private:
   G4double a1,a2,a1m,a2m;             //wymiary podstawy gornej , dolnej i dolnej cienkiego scyntylatora
   G4double h1,h2,h1m,h2m;             //wysokosci podstaw
   G4double h,hm,r,rm;                      // wysokosci graniastoslupow i orleglosci od srodka
@@ -36,7 +36,7 @@ class wymiary
   G4double dv1m,dv2m;
 
 
- public:
+public:
   wymiary();
   wymiary(G4double ,G4double ,G4double ,G4double ,G4double );
   void licz();
