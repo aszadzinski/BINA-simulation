@@ -1,6 +1,6 @@
 
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(bina_breakup2.11)
+project(bina)
 
 option(WITH_GEANT4_UIVIS "PACH" ON)
 if(WITH_GEANT4_UIVIS)
@@ -17,8 +17,8 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 
-add_executable(bina_breakup2.11 bina_breakup2.11.cc ${sources} ${headers})
-target_link_libraries(bina_breakup2.11 ${Geant4_LIBRARIES})
+add_executable(bina_run  Bina.cc ${sources} ${headers})
+target_link_libraries(bina_run ${Geant4_LIBRARIES})
 
 
 set(BINA_SCRIPTS
@@ -35,9 +35,9 @@ foreach(_script ${BINA_SCRIPTS})
 endforeach()
 
 
-add_custom_target(BINA DEPENDS bina_breakup2.11)
+add_custom_target(BINA DEPENDS bina_run)
 
 
-install(TARGETS bina_breakup2.11 DESTINATION bin)
+install(TARGETS bina_run DESTINATION bin)
 
 
