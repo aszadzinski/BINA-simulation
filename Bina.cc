@@ -4,7 +4,12 @@
 #include "Bina_EventAction.hh"
 #include "Bina_SteppingAction.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
@@ -23,7 +28,12 @@ int main(int argc,char** argv)
 {
         Bina_DetectorConstruction* Bina_detector = new Bina_DetectorConstruction;
         Bina_PhysicsList* Bina_physics=new Bina_PhysicsList;
-        G4RunManager * runManager = new G4RunManager;
+
+#ifdef G4MULTITHREADED
+	G4MTRunManager* runManager = new G4MTRunManager;
+#else
+      	G4RunManager * runManager = new G4RunManager;
+#endif
 
         runManager->SetUserInitialization(Bina_detector);
         runManager->SetUserInitialization(Bina_physics);
