@@ -1,5 +1,6 @@
 #include "Bina_DetectorConstruction.hh"
 #include "Bina_PhysicsList.hh"
+#include "Bina_ActionInitialization.hh"
 #include "Bina_PrimaryGeneratorAction.hh"
 #include "Bina_EventAction.hh"
 #include "Bina_SteppingAction.hh"
@@ -52,7 +53,7 @@ int main(int argc,char** argv)
                         G4cout<<"\n\t Dodano domyslny plik z geometria GEO.MAC\n";
                         UI->ApplyCommand(command+fileInp);
                 }
-
+			runManager->SetUserInitialization(new Bina_ActionInitialization());
 #ifdef G4VIS_USE
                 //G4VisManager* visManager = new Bina_VisManager;
 		G4VisManager* visManager = new G4VisExecutive;

@@ -17,14 +17,14 @@
 
 ## TODO
 
-[ ] README
-[ ] <boost/thread/thread.hpp>
-[ ] openMP for primarygenerator
-[ ] mpi test
-[ ] parallel step,gran
-[ ] Benchmark
-[ ] config
+- [ ] README
+- [ ] <boost/thread/thread.hpp>
+- [ ] openMP for primarygenerator
+- [ ] mpi test
+- [ ] parallel step,gran
+- [ ] Benchmark
+- [ ] config
 
-[ ]  webui
-[ ] parallel DC init
-[ ] Qt
+- [ ]  webui
+- [ ] parallel DC init
+- [ ] Qt
