@@ -13,9 +13,6 @@ class Bina_ActionInitialization : public G4VUserActionInitialization
 
     Bina_DetectorConstruction* myDC;
     Bina_PhysicsList* myPhysics;
-  //  virtual ~Bina_ActionInitialization();
-
-    //virtual void BuildForMaster() const;
     virtual void Build() const;
 };
 

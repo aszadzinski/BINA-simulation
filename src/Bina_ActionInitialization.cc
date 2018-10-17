@@ -14,28 +14,10 @@ Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* 
 }
 
 
-//Bina_ActionInitialization::~Bina_ActionInitialization()
-//{
-
-//}
-/*
-void Bina_ActionInitialization::BuildForMaster() const
-{
-//  Bina_RunAction* runAction = new Bina_RunAction;
-//  SetUserAction(runAction);
-}*/
-
 void Bina_ActionInitialization::Build() const
 {
   SetUserAction(new Bina_PrimaryGeneratorAction(myDC));
   SetUserAction(new Bina_EventAction);
   SetUserAction(new Bina_SteppingAction(myPhysics));
 
-//  Bina_RunAction* runAction = new Bina_RunAction;
-  //SetUserAction(runAction);
-
-  //Bina_EventAction* eventAction = new Bina_EventAction(runAction);
-//  SetUserAction(eventAction);
-
-  //SetUserAction(new Bina_SteppingAction(eventAction));
 }

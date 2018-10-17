@@ -61,16 +61,10 @@ int main(int argc,char** argv)
 #endif
 
 
-                // UserAction classes
-                //runManager->SetUserAction(new Bina_PrimaryGeneratorAction(Bina_detector));
-                //runManager->SetUserAction(new Bina_EventAction);
-              //  runManager->SetUserAction(new Bina_SteppingAction(Bina_physics));
-
                 //Initialize G4 kernel
                 runManager->Initialize();
                 G4UIsession* session = 0;
                 session = new G4UIterminal(new G4UItcsh);
-
 
                 if(argc<2)
                 {
