@@ -53,7 +53,7 @@ int main(int argc,char** argv)
                         G4cout<<"\n\t Dodano domyslny plik z geometria GEO.MAC\n";
                         UI->ApplyCommand(command+fileInp);
                 }
-			runManager->SetUserInitialization(new Bina_ActionInitialization());
+			runManager->SetUserInitialization(new Bina_ActionInitialization(Bina_detector,Bina_physics));
 #ifdef G4VIS_USE
                 //G4VisManager* visManager = new Bina_VisManager;
 		G4VisManager* visManager = new G4VisExecutive;
@@ -62,9 +62,9 @@ int main(int argc,char** argv)
 
 
                 // UserAction classes
-                runManager->SetUserAction(new Bina_PrimaryGeneratorAction(Bina_detector));
-                runManager->SetUserAction(new Bina_EventAction);
-                runManager->SetUserAction(new Bina_SteppingAction(Bina_physics));
+                //runManager->SetUserAction(new Bina_PrimaryGeneratorAction(Bina_detector));
+                //runManager->SetUserAction(new Bina_EventAction);
+              //  runManager->SetUserAction(new Bina_SteppingAction(Bina_physics));
 
                 //Initialize G4 kernel
                 runManager->Initialize();
