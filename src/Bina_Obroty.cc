@@ -27,13 +27,13 @@
  gkr[2]=(63.44*M_PI)/180.;
  gkr[3]=(79.2*M_PI)/180.;
  gkr[4]=(100.814*M_PI)/180.;
- gkr[5]=(116.58*M_PI)/180.;			
+ gkr[5]=(116.58*M_PI)/180.;
  gkr[6]=(142.623*M_PI)/180.;
 
  G4double fkr[10];        //phi angle  of the first element in the layer
                           // (actual staring value is shifted by 90 degrees)
 
- fkr[1]=0.;    fkr[2]=M_PI/5.;  fkr[3]=0.;  fkr[4]=fkr[2];  
+ fkr[1]=0.;    fkr[2]=M_PI/5.;  fkr[3]=0.;  fkr[4]=fkr[2];
  fkr[5]=0.;  fkr[6]=fkr[2];
 
  G4double k60,k72,kat,k360,k90;
@@ -46,15 +46,15 @@
 
  for(int w=1;w<w_max;w++)     // loop over layers
    {
-     if (n>=n_el)      
+     if (n>=n_el)
        {
        G4cout<<"\n too few elements of BINA declared";
        break ;
        }
      sgkr=gkr[w];                       // gamma angle
      sfkr =k90+fkr[w];                  // starting phi value
-     
-     while(sfkr<k360+k72)               // loop over phi angle; 
+
+     while(sfkr<k360+k72)               // loop over phi angle;
                                         // phi for centers of hexagons or pentagons
                                         // is calculared
        {
@@ -68,27 +68,27 @@
 	 while(kat<k360-0.1)           //rotation
 	   {
 	     nn=0;
-	     
+
 	     plac[n].y=M_PI-sgkr;
 	     plac[n].z=sfkr;          //kat theta w ktorym jest umieszczone centrum piecio/szesciokata
 	     plac[n].rx=sgkr*CLHEP::rad;       // Theta obrotu piecio/szesciokata
              plac[n].rz=(sfkr-k90)*CLHEP::rad; // Phi obrotu 5/6kata
 	     if(w==1)                   //        !!!if first layer!!!
-	       {                        // loop over elements of the hexagon 
-		 plac[n].ry=0.+kat;     // Psi //kat skladajacy detektory w 5 lub 6  
+	       {                        // loop over elements of the hexagon
+		 plac[n].ry=0.+kat;     // Psi //kat skladajacy detektory w 5 lub 6
 		 kat=kat + k60;         //   (from 0 to 6 * 60 degrees)
-		 plac[n].typ=2;         // hexagons are made of short E's 
+		 plac[n].typ=2;         // hexagons are made of short E's
 		 plac[n].x=r61;
 	       }
-	     
+
 	     if(w==2)                   //        !!! if second layer!!
 	       {                        // loop over elements of the pentagon
 		 plac[n].ry=0.+kat+M_PI;// Psi
 		 kat=kat + k72;         //   (from 0 to 5 * 72 degrees)
-		 plac[n].typ=0;         // pentagons are made of short E's 
+		 plac[n].typ=0;         // pentagons are made of short E's
 		 plac[n].x=r51;
 	       }
-	     
+
 	     if(w==3)
 	       {
 		 plac[n].ry=0.+kat;     // Psi
@@ -106,20 +106,20 @@
 	         if(sfkr>k90-0.02&&sfkr<k90+0.02)
 		   { plac[n].typ=-1; }
 	       }
-	     
+
 	     if(w==4)
 	       {
 		 plac[n].ry=0.+kat;     // Psi
-		 kat=kat + k60;  
+		 kat=kat + k60;
 		 plac[n].typ=3;         // heagons are made of long E's
-		 plac[n].x=r62;        
+		 plac[n].x=r62;
 	       }
-	     
+
 	     if(w==5)
 	       {
 		 plac[n].ry=0.+kat;     // Psi
-		 kat=kat + k72;  
-		 plac[n].typ=1;         // pentagons made of short E's  
+		 kat=kat + k72;
+		 plac[n].typ=1;         // pentagons made of short E's
 		 plac[n].x=r52;
 	       }
 	     if(w==6)
@@ -127,23 +127,23 @@
 		 plac[n].ry=0.+kat;     // Psi
 		 if(kat<0.1&&kat>(-0.1))
 		   {
-		     plac[n].typ=4;     // heagons are made of long E's 	
+		     plac[n].typ=4;     // heagons are made of long E's
 		     plac[n].x=r62;     // (special shape 1)
 
 		   }
 		 else if(kat<k60+0.1&&kat>k60-0.1)
 		   {
 		     plac[n].typ=5;     // heagons are made of  long E's
-		     plac[n].x=r62;     // 
+		     plac[n].x=r62;     //
 		   }
 		 else if(kat<(2*M_PI-k60+0.1)&&kat>(2*M_PI-k60-0.1))
 		   {
-		     plac[n].typ=6;     // heagons are made of long E's 
+		     plac[n].typ=6;     // heagons are made of long E's
 		     plac[n].x=r62;     // (special shape 3)
 		   }
 		 else
-		   { 
-		     nn=1; 
+		   {
+		     nn=1;
 		     plac[n].typ=-1;
 		   }
 		 kat=kat + k60;
@@ -159,7 +159,7 @@
  int t;
  for(int i=0;i<n;i++)
    {
-     if (n>=n_el)  
+     if (n>=n_el)
        {
 	 G4cout<<"\n too few elements of BINA declared";
 	 break ;
@@ -189,6 +189,5 @@
      plac[t].typ=plac[i].typ+10;
    }
 #endif
- 
- }
 
+ }

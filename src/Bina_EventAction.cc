@@ -15,6 +15,8 @@
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
+//#include <omp.h>
+//#include <unistd.h>
 
 Bina_EventAction::Bina_EventAction()
 {
@@ -32,3 +34,27 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
         getNb(evtNb);
         if (!(evtNb%100)) G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
 }
+
+/*
+void Bina_EventAction::EndOfEventAction(const G4Event* evt)
+{
+
+        NOTE G4cout outputs mix each other
+
+        G4int evtNb = evt->GetEventID();
+        getNb(evtNb);
+        const int unitime=100000;
+        if (!(evtNb%100))
+        {
+                #pragma omp parallel
+                {
+                        #pragma omp for schedule(dynamic,2)
+                for(int i=0;i<20;i++)
+                {
+                G4cout << " Thread:"<<omp_get_thread_num()<<" i="<<i<<G4endl;
+                usleep(unitime);
+                }
+                }
+        }
+}
+*/
