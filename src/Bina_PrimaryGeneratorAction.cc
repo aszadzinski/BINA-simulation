@@ -21,6 +21,8 @@
 #endif
 #include <iostream>
 
+#include <omp.h>
+
 //fstream filell;
 //int chooser=0;
 double csmax;
@@ -35,6 +37,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
         : myDetector(myDC)
 {
   #include "Bina_Detector.cfg"
+
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
         npd_choice = myDC->GetNpdChoice();
@@ -146,13 +149,19 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1);
                 GetStartAnglePhi(fi1);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-
+//#pragma omp parallel shared(particleGun1)  //strata +- 5%
+//#pragma omp sections
+//{
+//#pragma omp section
+//{
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-
+//#pragma omp section
+//{
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-
-                particleGun1->SetParticleEnergy(bt*CLHEP::GeV);
-
+//#pragma omp section
+//{
+                particleGun1->SetParticleEnergy(bt*CLHEP::GeV);//}
+//}
                 particleGun1->GeneratePrimaryVertex(anEvent);
         }
         else if (npd_choice == 0)
@@ -192,20 +201,29 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1,t2);
                 GetStartAnglePhi(fi1,fi2);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-
+#pragma omp parallel sections
+{
+   #pragma omp section
+   {
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-
                 particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
-                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
-
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+   }
+   #pragma omp section
+   {
+                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
                 particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-
-                particleGun1->GeneratePrimaryVertex(anEvent);
-                particleGun2->GeneratePrimaryVertex(anEvent);
+   }
+}
+#pragma omp barrier
+{
+        particleGun1->GeneratePrimaryVertex(anEvent);
+        particleGun2->GeneratePrimaryVertex(anEvent);
+}
 
         }
+
         else //(npd_choice == 2)
         {
                 //filell.open("fileoutput.txt",ios::out|ios::app);

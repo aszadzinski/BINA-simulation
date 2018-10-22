@@ -18,6 +18,6 @@ void Bina_ActionInitialization::Build() const
 {
   SetUserAction(new Bina_PrimaryGeneratorAction(myDC));
   SetUserAction(new Bina_EventAction);
+  SetUserAction(new Bina_RunAction);
   SetUserAction(new Bina_SteppingAction(myPhysics));
-
 }

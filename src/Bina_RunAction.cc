@@ -10,6 +10,8 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include <omp.h>
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Bina_RunAction::Bina_RunAction()
@@ -25,11 +27,12 @@ Bina_RunAction::~Bina_RunAction()
 
 void Bina_RunAction::BeginOfRunAction(const G4Run*)
 {
-G4cout<<"TEST";
+  time1 = omp_get_wtime();
 }
 
 void Bina_RunAction::EndOfRunAction(const G4Run* run)
 {
 
+  G4cout<<"RA= "<<omp_get_wtime()-time1<<G4endl;
 
 }

@@ -32,7 +32,10 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
 {
         G4int evtNb = evt->GetEventID();
         getNb(evtNb);
-        if (!(evtNb%100)) G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
+        if (!(evtNb%100))
+        {
+                G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
+        }
 }
 
 /*
