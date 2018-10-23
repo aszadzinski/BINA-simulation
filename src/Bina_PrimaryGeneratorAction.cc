@@ -40,7 +40,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
 
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
-        npd_choice = myDC->GetNpdChoice();
+        npd_choice = 0;//myDC->GetNpdChoice();
         icros=myDC->GetNeumann();
         bfwhmx = myDC->GetBfwhmX();
         bfwhmy = myDC->GetBfwhmY();
@@ -177,16 +177,23 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAnglePhi(fi1,fi2);
 
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-
+#pragma omp parallel sections
+{
+#pragma omp section
+{
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-
                 particleGun1->SetParticleEnergy(bt*CLHEP::GeV);
-                particleGun2->SetParticleEnergy(bt*CLHEP::GeV);
-
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+}
+#pragma omp section
+{
+                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+                particleGun2->SetParticleEnergy(bt*CLHEP::GeV);
                 particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+}
 
+}
+#pragma omp barrier
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
         }
