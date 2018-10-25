@@ -18,9 +18,9 @@
 //#include <omp.h>
 //#include <unistd.h>
 
-Bina_EventAction::Bina_EventAction()
+Bina_EventAction::Bina_EventAction(bool en_omp)
 {
-        ;
+        enable_omp = en_omp;
 }
 
 Bina_EventAction::~Bina_EventAction()
@@ -34,6 +34,10 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
         getNb(evtNb);
         if (!(evtNb%100))
         {
+                if(enable_omp)
+                {
+                        G4cout<<"(omp)";
+                }
                 G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
         }
 }

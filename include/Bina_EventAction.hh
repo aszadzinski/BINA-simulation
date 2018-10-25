@@ -9,12 +9,12 @@
 class Bina_EventAction : public G4UserEventAction
 {
 public:
-        Bina_EventAction();
+        Bina_EventAction(bool);
         virtual ~Bina_EventAction();
 public:
         virtual void   BeginOfEventAction(const G4Event*);
         //virtual void   EndOfEventAction(const G4Event*);
-
+        bool enable_omp;
 inline static int getNb(int num = -1 )
 {
         static int temp;

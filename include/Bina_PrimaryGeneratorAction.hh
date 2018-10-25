@@ -31,7 +31,7 @@ class Zmienne;
 class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	Bina_PrimaryGeneratorAction(Bina_DetectorConstruction*);
+	Bina_PrimaryGeneratorAction(Bina_DetectorConstruction*, bool);
 	~Bina_PrimaryGeneratorAction();
 	//////////////////////////////
 	// Generation Parameters
@@ -53,8 +53,12 @@ public:
 					exit_win_z, exit_win_th, exit_win_rad, z_pipe, dim_degrader[3];
 
 	double generator_min, generator_max;
+
+	bool enable_omp;
+	int thread_num;
 public:
 	void GeneratePrimaries(G4Event*);
+	void set_threads(int);
 
 inline static double* GetStartEnergy (double en1 = -1., double en2 = -1., double en3 = -1.)
 {

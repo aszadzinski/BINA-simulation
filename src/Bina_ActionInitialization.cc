@@ -6,9 +6,9 @@
 #include "Bina_DetectorConstruction.hh"
 #include "Bina_PhysicsList.hh"
 
-Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* DC, Bina_PhysicsList* Physics) : G4VUserActionInitialization()
+Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* DC, Bina_PhysicsList* Physics, bool en_omp) : G4VUserActionInitialization()
 {
-
+  enable_omp = en_omp;
   myDC = DC;
   myPhysics = Physics;
 }
@@ -16,8 +16,8 @@ Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* 
 
 void Bina_ActionInitialization::Build() const
 {
-  SetUserAction(new Bina_PrimaryGeneratorAction(myDC));
-  SetUserAction(new Bina_EventAction);
+  SetUserAction(new Bina_PrimaryGeneratorAction(myDC, enable_omp));
+  SetUserAction(new Bina_EventAction(enable_omp));
   SetUserAction(new Bina_RunAction);
   SetUserAction(new Bina_SteppingAction(myPhysics));
 }
