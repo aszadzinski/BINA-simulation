@@ -14,13 +14,13 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-
+#include "features.hh"
 //#include <omp.h>
 //#include <unistd.h>
 
-Bina_EventAction::Bina_EventAction(bool en_omp)
+Bina_EventAction::Bina_EventAction(MyOMP* mp2)
 {
-        enable_omp = en_omp;
+        mp = mp2;
 }
 
 Bina_EventAction::~Bina_EventAction()
@@ -34,9 +34,9 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
         getNb(evtNb);
         if (!(evtNb%100))
         {
-                if(enable_omp)
+                if(mp->ompON)
                 {
-                        G4cout<<"(omp)";
+                        G4cout<<"(omp)("<<mp->threads_num<<")";
                 }
                 G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
         }

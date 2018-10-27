@@ -6,15 +6,18 @@
 #include "globals.hh"
 #include <omp.h>
 
+struct MyOMP;
 class Bina_EventAction : public G4UserEventAction
 {
 public:
-        Bina_EventAction(bool);
+        Bina_EventAction(MyOMP*);
         virtual ~Bina_EventAction();
 public:
         virtual void   BeginOfEventAction(const G4Event*);
         //virtual void   EndOfEventAction(const G4Event*);
-        bool enable_omp;
+
+        MyOMP* mp;
+
 inline static int getNb(int num = -1 )
 {
         static int temp;

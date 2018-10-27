@@ -22,7 +22,7 @@
 #include <iostream>
 
 #include <omp.h>
-
+#include "features.hh"
 //fstream filell;
 //int chooser=0;
 double csmax;
@@ -33,7 +33,7 @@ double step[4] = {2.0, 2.0, 15.0,0.002};
 double offs[4] = {5.0, 5.0, 0.0, 0.0};
 
 
-Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstruction* myDC, bool en_omp)
+Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstruction* myDC, MyOMP* mp2)
         : myDetector(myDC)
 {
   #include "Bina_Detector.cfg"
@@ -62,9 +62,9 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
         t1  = 0.;   t2  = 0.;   t3  = 0.;
         fi1 = 0.;             fi2 = 0.;   fi3 = 0.;
         bt /=1000.;
-
-        enable_omp = en_omp;
-        set_threads(2);
+        mp = mp2;
+        enable_omp = mp2->ompON;
+        set_threads(mp->threads_num);
 
         RandomInit();
 
@@ -180,7 +180,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAnglePhi(fi1,fi2);
 
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-#pragma omp parallel if(enable_omp)
+#pragma omp parallel if(mp->threads_num)
 #pragma omp sections
 {
 #pragma omp section
@@ -212,7 +212,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1,t2);
                 GetStartAnglePhi(fi1,fi2);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-#pragma omp parallel if(enable_omp)
+#pragma omp parallel if(mp->threads_num)
 #pragma omp sections
 {
    #pragma omp section
@@ -1608,8 +1608,8 @@ void Bina_PrimaryGeneratorAction::set_threads(int n)
 {
 if(enable_omp)
         {
-                thread_num = n;
-                omp_set_num_threads(thread_num);
+                threads_num = n;
+                omp_set_num_threads(threads_num);
         }
 else
         {

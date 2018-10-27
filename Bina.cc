@@ -22,23 +22,22 @@
 #include "G4VisExecutive.hh"
 #endif
 #include <sys/stat.h>
-
-
+#include "features.hh"
 
 int main(int argc,char** argv)
 {
-				bool enable_omp;
-				int threads_num;
+				MyOMP* mp = new MyOMP;
+				mp -> threads_num = 3;
 
         Bina_DetectorConstruction* Bina_detector = new Bina_DetectorConstruction;
         Bina_PhysicsList* Bina_physics=new Bina_PhysicsList;
 
 #ifdef G4MULTITHREADED
 	G4MTRunManager* runManager = new G4MTRunManager;
-	enable_omp = false;
+	mp -> ompON = false;
 #else
   G4RunManager * runManager = new G4RunManager;
-	enable_omp = true;
+	mp -> ompON  = true;
 #endif
 
         runManager->SetUserInitialization(Bina_detector);
@@ -58,7 +57,7 @@ int main(int argc,char** argv)
                         G4cout<<"\n\t Dodano domyslny plik z geometria GEO.MAC\n";
                         UI->ApplyCommand(command+fileInp);
                 }
-			runManager->SetUserInitialization(new Bina_ActionInitialization(Bina_detector,Bina_physics, enable_omp));
+			runManager->SetUserInitialization(new Bina_ActionInitialization(Bina_detector,Bina_physics, mp));
 #ifdef G4VIS_USE
                 //G4VisManager* visManager = new Bina_VisManager;
 		G4VisManager* visManager = new G4VisExecutive;

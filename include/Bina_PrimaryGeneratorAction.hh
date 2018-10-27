@@ -14,6 +14,7 @@
 class Bina_DetectorConstruction;
 class G4ParticleGun;
 class G4Event;
+struct MyOMP;
 //class G4RandGauss;
 class Zmienne;
 /*class RandFlat;
@@ -31,7 +32,7 @@ class Zmienne;
 class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
 public:
-	Bina_PrimaryGeneratorAction(Bina_DetectorConstruction*, bool);
+	Bina_PrimaryGeneratorAction(Bina_DetectorConstruction*, MyOMP*);
 	~Bina_PrimaryGeneratorAction();
 	//////////////////////////////
 	// Generation Parameters
@@ -54,8 +55,9 @@ public:
 
 	double generator_min, generator_max;
 
+	MyOMP* mp;
 	bool enable_omp;
-	int thread_num;
+	int threads_num;
 public:
 	void GeneratePrimaries(G4Event*);
 	void set_threads(int);
