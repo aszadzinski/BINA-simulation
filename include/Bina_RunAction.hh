@@ -13,7 +13,7 @@ class Bina_RunAction : public G4UserRunAction
     Bina_RunAction();
     virtual ~Bina_RunAction();
 
-    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
     double time1;
 //  private:

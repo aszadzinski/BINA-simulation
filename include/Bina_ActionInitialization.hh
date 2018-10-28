@@ -4,18 +4,18 @@
 #include "G4VUserActionInitialization.hh"
 #include "Bina_DetectorConstruction.hh"
 #include "Bina_PhysicsList.hh"
-struct MyOMP;
-/// Action initialization class.
 
+/// Action initialization class.
+struct MyOMP;
 class Bina_ActionInitialization : public G4VUserActionInitialization
 {
-  public:
-    Bina_ActionInitialization(Bina_DetectorConstruction*, Bina_PhysicsList*, MyOMP*);
+public:
+Bina_ActionInitialization(Bina_DetectorConstruction*, Bina_PhysicsList*, MyOMP*);
 
-    Bina_DetectorConstruction* myDC;
-    Bina_PhysicsList* myPhysics;
-    MyOMP* mp;
-    virtual void Build() const;
+Bina_DetectorConstruction*  myDC;
+Bina_PhysicsList*           myPhysics;
+MyOMP*                      mp;
+
+virtual void Build() const;
 };
-
 #endif

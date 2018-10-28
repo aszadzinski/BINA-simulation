@@ -594,7 +594,7 @@ void Bina_DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue
 //  Mwpc
 //////////////////////////////
 
-        // MWPC
+// MWPC
         else if(command==MwpcIsCmd)
                 myDetector->SetMwpcIs(MwpcIsCmd->GetNewIntValue(newValues));
         else if(command==MwpcDimFrameXCmd)

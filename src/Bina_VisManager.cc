@@ -37,64 +37,63 @@
 #include "G4VRML2.hh"
 #endif
 
-Bina_VisManager::Bina_VisManager () {}
+Bina_VisManager::Bina_VisManager () {
+}
 
 void Bina_VisManager::RegisterGraphicsSystems () {
 
-  // Graphics Systems not needing external packages or libraries...
-  RegisterGraphicsSystem (new G4ASCIITree);
-  RegisterGraphicsSystem (new G4DAWNFILE);
-  RegisterGraphicsSystem (new G4HepRepFile);
-  RegisterGraphicsSystem (new G4HepRep);
-  RegisterGraphicsSystem (new G4RayTracer);
-  RegisterGraphicsSystem (new G4VRML1File);
-  RegisterGraphicsSystem (new G4VRML2File);
-  // Graphics systems needing external packages or libraries...
+// Graphics Systems not needing external packages or libraries...
+        RegisterGraphicsSystem (new G4ASCIITree);
+        RegisterGraphicsSystem (new G4DAWNFILE);
+        RegisterGraphicsSystem (new G4HepRepFile);
+        RegisterGraphicsSystem (new G4HepRep);
+        RegisterGraphicsSystem (new G4RayTracer);
+        RegisterGraphicsSystem (new G4VRML1File);
+        RegisterGraphicsSystem (new G4VRML2File);
+// Graphics systems needing external packages or libraries...
 
 #ifdef G4VIS_USE_DAWN
-  RegisterGraphicsSystem (new G4FukuiRenderer);
+        RegisterGraphicsSystem (new G4FukuiRenderer);
 #endif
 
 #ifdef G4VIS_USE_OPACS
-  RegisterGraphicsSystem (new G4Wo);
-  RegisterGraphicsSystem (new G4Xo);
+        RegisterGraphicsSystem (new G4Wo);
+        RegisterGraphicsSystem (new G4Xo);
 #endif
 
-  #ifdef G4VIS_USE_OPENGLX
-  RegisterGraphicsSystem (new G4OpenGLImmediateX);
-  //RegisterGraphicsSystem (new G4OpenGLStoredX);
-  #endif
+#ifdef G4VIS_USE_OPENGLX
+        RegisterGraphicsSystem (new G4OpenGLImmediateX);
+//RegisterGraphicsSystem (new G4OpenGLStoredX);
+#endif
 
 #ifdef G4VIS_USE_OPENGLWIN32
-  RegisterGraphicsSystem (new G4OpenGLImmediateWin32);
-  RegisterGraphicsSystem (new G4OpenGLStoredWin32);
+        RegisterGraphicsSystem (new G4OpenGLImmediateWin32);
+        RegisterGraphicsSystem (new G4OpenGLStoredWin32);
 #endif
 
-  //#ifdef G4VIS_USE_OPENGLXM
-  //RegisterGraphicsSystem (new G4OpenGLImmediateXm);
-  //RegisterGraphicsSystem (new G4OpenGLStoredXm);
-  //#endif
+//#ifdef G4VIS_USE_OPENGLXM
+//RegisterGraphicsSystem (new G4OpenGLImmediateXm);
+//RegisterGraphicsSystem (new G4OpenGLStoredXm);
+//#endif
 
 #ifdef G4VIS_USE_OIX
-  RegisterGraphicsSystem (new G4OpenInventorX);
+        RegisterGraphicsSystem (new G4OpenInventorX);
 #endif
 
 #ifdef G4VIS_USE_OIWIN32
-  RegisterGraphicsSystem (new G4OpenInventorWin32);
+        RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
 #ifdef G4VIS_USE_VRML
-  RegisterGraphicsSystem (new G4VRML1);
-  RegisterGraphicsSystem (new G4VRML2);
+        RegisterGraphicsSystem (new G4VRML1);
+        RegisterGraphicsSystem (new G4VRML2);
 #endif
 
-  if (fVerbose > 0) {
+        if (fVerbose > 0) {
 //    G4cout <<
 //      "\nYou have successfully registered the following graphics systems."
 //	 << G4endl;
 //    PrintAvailableGraphicsSystems ();
-  }
+        }
 }
 #endif
-
-

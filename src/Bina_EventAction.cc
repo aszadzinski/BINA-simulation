@@ -14,6 +14,7 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
+
 #include "features.hh"
 //#include <omp.h>
 //#include <unistd.h>
@@ -43,25 +44,25 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
 }
 
 /*
-void Bina_EventAction::EndOfEventAction(const G4Event* evt)
-{
+   void Bina_EventAction::EndOfEventAction(const G4Event* evt)
+   {
 
-        NOTE G4cout outputs mix each other
+   NOTE G4cout outputs mix each other
 
-        G4int evtNb = evt->GetEventID();
-        getNb(evtNb);
-        const int unitime=100000;
-        if (!(evtNb%100))
-        {
-                #pragma omp parallel
-                {
-                        #pragma omp for schedule(dynamic,2)
-                for(int i=0;i<20;i++)
-                {
-                G4cout << " Thread:"<<omp_get_thread_num()<<" i="<<i<<G4endl;
-                usleep(unitime);
-                }
-                }
-        }
-}
-*/
+   G4int evtNb = evt->GetEventID();
+   getNb(evtNb);
+   const int unitime=100000;
+   if (!(evtNb%100))
+   {
+ #pragma omp parallel
+   {
+ #pragma omp for schedule(dynamic,2)
+   for(int i=0;i<20;i++)
+   {
+   G4cout << " Thread:"<<omp_get_thread_num()<<" i="<<i<<G4endl;
+   usleep(unitime);
+   }
+   }
+   }
+   }
+ */

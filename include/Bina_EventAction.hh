@@ -7,15 +7,16 @@
 #include <omp.h>
 
 struct MyOMP;
+
 class Bina_EventAction : public G4UserEventAction
 {
-public:
+        public:
         Bina_EventAction(MyOMP*);
         virtual ~Bina_EventAction();
-public:
-        virtual void   BeginOfEventAction(const G4Event*);
-        //virtual void   EndOfEventAction(const G4Event*);
 
+public:
+        virtual void BeginOfEventAction(const G4Event*);
+        //virtual void   EndOfEventAction(const G4Event*);
         MyOMP* mp;
 
 inline static int getNb(int num = -1 )
@@ -25,6 +26,4 @@ inline static int getNb(int num = -1 )
         return temp;
 };
 };
-
-
 #endif

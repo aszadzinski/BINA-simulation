@@ -54,10 +54,10 @@ public:
   void SetPhiMax(G4double PhiMax)      {fimax=PhiMax;};
   void SetKinematicsMin(G4double kinMin) {genMin=kinMin*0.001;};
   void SetKinematicsMax(G4double kinMax) {genMax=kinMax*0.001;};
-//  void SetParamUpdate() ;  
+//  void SetParamUpdate() ;
 
 public:
-  int    GetNpdChoice()   {return npd_choice;};  
+  int    GetNpdChoice()   {return npd_choice;};
   int    GetNeumann()     {return neumann;};
   double GetBfwhmX()      {return bfwhmx;};
   double GetBfwhmY()      {return bfwhmy;};
@@ -94,7 +94,7 @@ private:
 //////////////////////////////
 //  Ball scintilators
 //////////////////////////////
-public:  
+public:
   void SetBallIs(G4int BallIs)               {ballis=BallIs;};
   void SetBallVisible(G4int BallVisible)     {ballvisible=BallVisible;};
 //Ball placement
@@ -102,7 +102,7 @@ public:
   void SetBallYplace(G4double BallYplace)    {ballYplace=BallYplace;};
   void SetBallZplace(G4double BallZplace)    {ballZplace=BallZplace;};
 private:
-G4int ballis, ballvisible; 
+G4int ballis, ballvisible;
 G4double ballXplace,ballYplace,ballZplace;
 //////////////////////////////
 //  Mwpc
@@ -124,15 +124,15 @@ private:
   G4int mwpcis;
   G4double mwpcdimfx, mwpcdimfz, mwpcdimgx, mwpcdimgz, mwpcholeIn, mwpcholeOut,
            mwpcXplace, mwpcYplace, mwpcZplace ;
-  
+
 //////////////////////////////
 // Delta E
 //////////////////////////////
 public:
   void SetDeltaeIs(G4int DeltaeIs)             {deIs=DeltaeIs;};
   void SetDeltaeVisible(G4int DeltaeVisible)   {deVisible=DeltaeVisible;};
-  void SetDeltaeNMax(G4int DeltaeNmax)         {nde_max=DeltaeNmax;};   
-  void SetDeltaeN0(G4int DeltaeNmin)           {nde_min=DeltaeNmin;}; 
+  void SetDeltaeNMax(G4int DeltaeNmax)         {nde_max=DeltaeNmax;};
+  void SetDeltaeN0(G4int DeltaeNmin)           {nde_min=DeltaeNmin;};
   void SetDeltaeFoil(G4double DeltaeFoil)      {dedimf=DeltaeFoil;};
   void SetDeltaeDimX(G4double DeltaeDimX)      {dedimX=DeltaeDimX;};
   void SetDeltaeDimY(G4double DeltaeDimY)      {dedimY=DeltaeDimY;};
@@ -190,8 +190,8 @@ public:
  void SetWallCenterXplace(G4double WallXplace) {wallXplace=WallXplace;};
  void SetWallCenterYplace(G4double WallYplace) {wallYplace=WallYplace;};
  void SetWallCenterZplace(G4double WallZplace) {wallZplace=WallZplace;};
-private: 
- G4int wallIs, wallVisible, wallN0, wallNCenter, wallNMax;
+private:
+ G4int    wallIs, wallVisible, wallN0, wallNCenter, wallNMax;
  G4double wallRIn, wallROut, wallDimcX, wallAng0, wallAng, wallholeIn, wallholeOut, wallSepar;
  G4double wallXplace,wallYplace,wallZplace;
 //////////////////////////////
@@ -201,7 +201,7 @@ public:
  void SetWallDimX(G4double WallLDimX)     {wallLdimX=WallLDimX;};
  void SetWallDimY(G4double WallLDimY)     {wallLdimY=WallLDimY;};
  void SetWallDimZ(G4double WallLDimZ)     {wallLdimZ=WallLDimZ;};
- void SetWallNMax(G4int WallNMax)          {wallNMax=WallNMax;};
+ void SetWallNMax(G4int WallNMax)         {wallNMax=WallNMax;};
 // Wall placement
  void SetWallDimS(G4double WallDimS) {walldimS=WallDimS;};
 
@@ -210,16 +210,16 @@ private:
 
  // private:
     G4int aj1bx, aj1by, ajbz, aj1theta, aj2theta, aj1phi, aj2phi, aj1ekin, aja10,
-    	aja20, aju, ajcs1, ajcs02, aj1r1, aj1r2, npd_choice, neumann, n_elastic, n_bar, n_pipe;
+    	    aja20, aju, ajcs1, ajcs02, aj1r1, aj1r2, npd_choice, neumann, n_elastic, n_bar, n_pipe;
     G4double bfwhmx, bfwhmy, eps_separ, bt, pz, pzz, themin, themax, themin2,
-    	   themax2, fimin, fimax, genMin, genMax;
+    	       themax2, fimin, fimax, genMin, genMax;
     double dim_mars[3], z_shift, dim_trgt[3], xyz_trgt[3],
-      dim_mwpc1[5], dim_ring[2], xyz_mwpc1[3], dim_mwpc2[4], dim_hole2[2],
-      xyz_mwpc2[3], par_mwpc[5], dim_delta[4], xyz_delta[6], xyz_degrader[3],
-      exit_win_z, exit_win_th, exit_win_rad, z_pipe, dim_degrader[3];
+          dim_mwpc1[5], dim_ring[2], xyz_mwpc1[3], dim_mwpc2[4], dim_hole2[2],
+          xyz_mwpc2[3], par_mwpc[5], dim_delta[4], xyz_delta[6], xyz_degrader[3],
+          exit_win_z,  exit_win_th, exit_win_rad, z_pipe, dim_degrader[3];
 
-     double *w_eps_separ, *w_z_shift, *w_z_pipe;
-     int *w_n_bar, *w_n_pipe;
+     double*  w_eps_separ, *w_z_shift, *w_z_pipe;
+     int *    w_n_bar, *w_n_pipe;
 
   private:
      void Seen(void);			//visualization parameters
@@ -238,19 +238,19 @@ private:
      G4VPhysicalVolume* trgt_phs;   // pointer to the physical Target -> liguid hydrogen
      G4Tubs*            trgt_fr_sol;   // targer frame
      G4LogicalVolume*   trgt_fr_log;   //
-     G4VPhysicalVolume* trgt_fr_phs;   // 
+     G4VPhysicalVolume* trgt_fr_phs;   //
 
      G4Tubs*            trgt_sh_sol;   // targer frame
      G4LogicalVolume*   trgt_sh_log;   //
-     G4VPhysicalVolume* trgt_sh_phs;   // 
+     G4VPhysicalVolume* trgt_sh_phs;   //
      G4SubtractionSolid* trgt_shc_sol;
 
      G4Tubs*            trgt_win_sol;   // pointer to the solid Target window -> aramica 25um
      G4LogicalVolume*   trgt_win_log;   // pointer to the logical Target window -> aramica 25um
      G4VPhysicalVolume* trgt_win_phs[2];   // pointer to the physical Target window -> aramica 25um
 
-     G4Tubs*            exit_win_sol;   // pointer to the solid 
-     G4LogicalVolume*   exit_win_log;   // pointer to the logical 
+     G4Tubs*            exit_win_sol;   // pointer to the solid
+     G4LogicalVolume*   exit_win_log;   // pointer to the logical
      G4VPhysicalVolume* exit_win_phs;   // pointer to the physical
 
      G4Box*             mwpc1_sol;  // pointer to the solid MWPC1 - > mother
@@ -267,10 +267,10 @@ private:
      G4LogicalVolume*   mwpc1_gas_log;  // pointer to the logical MWPC1 gas chamber
      G4VPhysicalVolume* mwpc1_gas_phs;  // pointer to the physical MWPC1 gas chamber
 
-     G4Box*		mwpc1_wire_plane_mother_sol;
-     G4Tubs*   		mwpc1_hole_sol;
+     G4Box*		          mwpc1_wire_plane_mother_sol;
+     G4Tubs*   		      mwpc1_hole_sol;
      G4SubtractionSolid* mwpc1_wire_plane_mother_minus_sol;
-     G4LogicalVolume*	mwpc1_wire_plane_mother_log[12];
+     G4LogicalVolume*	  mwpc1_wire_plane_mother_log[12];
      G4Tubs*            mwpc1_wire_sol;
      G4Tubs*            mwpc1_wire_c_sol[30];
      G4Tubs*            mwpc1_wire_45_sol[150];
@@ -282,9 +282,9 @@ private:
      G4VPhysicalVolume* mwpc1_wire_y_phs[250];
      G4VPhysicalVolume* mwpc1_wire_45_phs[350];
 
-     G4Box*		mwpc1_catode_foil_sol;
+     G4Box*	           	mwpc1_catode_foil_sol;
      G4SubtractionSolid* mwpc1_catode_minus_sol;
-     G4LogicalVolume*	mwpc1_catode_foil_log;
+     G4LogicalVolume*	  mwpc1_catode_foil_log;
      G4VPhysicalVolume* mwpc1_catode_foil_phs[8];
 
      G4Tubs*            mwpc1_ring_sol;  // pointer to the solid MWPC1 vacum hole  (G4double center)
@@ -302,12 +302,12 @@ private:
      G4LogicalVolume*   pipe_log;  // pointer to the logical
      G4VPhysicalVolume* pipe_phs;  // pointer to the physical
 
-     G4Tubs*		win_scatering_sol;
+     G4Tubs*		        win_scatering_sol;
      G4LogicalVolume*   win_scatering_log;
      G4VPhysicalVolume* win_scatering_phs;
 
 
-     
+
      G4Tubs*            walec;
      G4Box*             deltaE_w_sol;
      G4SubtractionSolid* deltaE_wminus_sol[10];
@@ -333,7 +333,7 @@ private:
 ///////////////////////
 ///  Delta E
 ///////////////////////
-     
+
      G4Box*              deltae_W_sol;
      G4SubtractionSolid* deltae_Wc_sol[10];
      G4LogicalVolume*    deltae_W_log[10];
@@ -346,12 +346,12 @@ private:
 ///////////////////////
 ///  Folia
 ///////////////////////
-     
+
      G4Box*              foil_sol;
      G4SubtractionSolid* foil_min_sol;
      G4LogicalVolume*    foil_log;
      G4VPhysicalVolume*  foil_phs;
-     
+
 ///////////////////////
 ///  Wall E
 ///////////////////////
@@ -371,10 +371,9 @@ private:
      G4LogicalVolume*    wallf_L_log[10];
      G4LogicalVolume*    wall_Spec_log[2];
      G4LogicalVolume*    wallf_Spec_log[2];
-     G4VPhysicalVolume*  wall_phs[20];  
-     G4VPhysicalVolume*  wallf_phs[20];  
-     
+     G4VPhysicalVolume*  wall_phs[20];
+     G4VPhysicalVolume*  wallf_phs[20];
+
      Bina_DetectorMessenger* detectorMessenger;  // pointer to the Messenger
 };
 #endif
-

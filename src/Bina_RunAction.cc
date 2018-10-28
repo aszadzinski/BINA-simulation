@@ -12,27 +12,20 @@
 
 #include <omp.h>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Bina_RunAction::Bina_RunAction()
-: G4UserRunAction()//,
-//  fEdep(0.),
-//  fEdep2(0.)
-{
-
-}
+Bina_RunAction::Bina_RunAction() : G4UserRunAction()
+{;}
 
 Bina_RunAction::~Bina_RunAction()
-{}
+{
+}
 
 void Bina_RunAction::BeginOfRunAction(const G4Run*)
 {
-  time1 = omp_get_wtime();
+        time1 = omp_get_wtime();
 }
 
 void Bina_RunAction::EndOfRunAction(const G4Run* run)
 {
-
-  G4cout<<"RA= "<<omp_get_wtime()-time1<<G4endl;
-
+        G4cout<<"RA= "<<omp_get_wtime()-time1<<G4endl;
 }

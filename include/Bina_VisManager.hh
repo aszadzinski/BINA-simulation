@@ -5,20 +5,13 @@
 
 #include "G4VisManager.hh"
 
-
 class Bina_VisManager: public G4VisManager {
 
 public:
-
   Bina_VisManager ();
 
-
 private:
-
   void RegisterGraphicsSystems ();
-
 };
-
 #endif
-
 #endif

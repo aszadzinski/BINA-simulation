@@ -36,7 +36,7 @@ double offs[4] = {5.0, 5.0, 0.0, 0.0};
 Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstruction* myDC, MyOMP* mp2)
         : myDetector(myDC)
 {
-  #include "Bina_Detector.cfg"
+#include "Bina_Detector.cfg"
 
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
@@ -79,7 +79,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
         particle = particleTable->FindParticle("neutron");
         n_mass = particle->GetPDGMass()/1000.;
 
-        //*********************** Uwaga dokladnosc masy to 6 miejsc po przecinku *GeV ***********
+//*********************** Uwaga dokladnosc masy to 6 miejsc po przecinku *GeV ***********
 
         if (npd_choice <  0)
         {
@@ -108,7 +108,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
         }
         else if (npd_choice == 2)
         {
-                //filell.open("fileoutput.txt",ios::out|ios::app);
+//filell.open("fileoutput.txt",ios::out|ios::app);
                 break_read(); //read cross table and analysing power
                 particleGun1 = new G4ParticleGun(n_particle);
                 particleGun2 = new G4ParticleGun(n_particle);
@@ -145,7 +145,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         if (npd_choice <  0)
         {
-                // G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+// G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
                 elastic(momentum);
                 Pos(); //random vertex
                 GetStartEnergy(bt1*1000.);
@@ -169,12 +169,12 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
         }
         else if (npd_choice == 0)
         {
-                //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+//G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
                 upunif(momentum);
                 ProcNb(npd_choice);
 
                 Pos(); //random vertex
-                // rs GetStartEnergy(bt1*1000.,bt1*1000.);		// this isn't error !!!
+// rs GetStartEnergy(bt1*1000.,bt1*1000.);		// this isn't error !!!
                 GetStartEnergy(bt*1000.,bt*1000.);
                 GetStartAngleTheta(t1,t2);
                 GetStartAnglePhi(fi1,fi2);
@@ -182,28 +182,28 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
 #pragma omp parallel if(mp->threads_num)
 #pragma omp sections
-{
+                {
 #pragma omp section
-{
-                particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-                particleGun1->SetParticleEnergy(bt*CLHEP::GeV);
-                particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-}
+                        {
+                                particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
+                                particleGun1->SetParticleEnergy(bt*CLHEP::GeV);
+                                particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                        }
 #pragma omp section
-{
-                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-                particleGun2->SetParticleEnergy(bt*CLHEP::GeV);
-                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-}
+                        {
+                                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+                                particleGun2->SetParticleEnergy(bt*CLHEP::GeV);
+                                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                        }
 
-}
+                }
 #pragma omp barrier
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
         }
         else if (npd_choice == 1)
         {
-                //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+//G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
                 ugelast(momentum);
                 ProcNb(npd_choice);
                 Pos();
@@ -214,32 +214,32 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
 #pragma omp parallel if(mp->threads_num)
 #pragma omp sections
-{
-   #pragma omp section
-   {
-                particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-                particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
-                particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-   }
-   #pragma omp section
-   {
-                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
-                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-   }
-}
+                {
+#pragma omp section
+                        {
+                                particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
+                                particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
+                                particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                        }
+#pragma omp section
+                        {
+                                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+                                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
+                                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                        }
+                }
 #pragma omp barrier
-{
-        particleGun1->GeneratePrimaryVertex(anEvent);
-        particleGun2->GeneratePrimaryVertex(anEvent);
-}
+                {
+                        particleGun1->GeneratePrimaryVertex(anEvent);
+                        particleGun2->GeneratePrimaryVertex(anEvent);
+                }
 
         }
 
         else //(npd_choice == 2)
         {
-                //filell.open("fileoutput.txt",ios::out|ios::app);
-                //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+//filell.open("fileoutput.txt",ios::out|ios::app);
+//G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
                 ugbreak(momentum);
                 Pos();
 
@@ -264,7 +264,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 particleGun2->GeneratePrimaryVertex(anEvent);
                 particleGun3->GeneratePrimaryVertex(anEvent);
 //    chooser++;
-                //filell.close();
+//filell.close();
         }
 }
 
@@ -320,16 +320,16 @@ double Bina_PrimaryGeneratorAction::RandomGauss(double seed, double mean, double
         {
                 num = (*GaussDist[0]).fire(mean, deviation);
                 (*GaussDist[0]).fire(mean, deviation);
-                //num = (*FlatDist[0]).fire(mean, deviation);
-                //(*FlatDist[0]).fire(mean, deviation);
+//num = (*FlatDist[0]).fire(mean, deviation);
+//(*FlatDist[0]).fire(mean, deviation);
                 return num;
         }
         if (seed == aj1by)
         {
                 num = (*GaussDist[1]).fire(mean, deviation);
                 (*GaussDist[1]).fire(mean, deviation);
-                //num = (*GD2).fire(mean, deviation);
-                //(*GD2).fire(mean, deviation);
+//num = (*GD2).fire(mean, deviation);
+//(*GD2).fire(mean, deviation);
                 return num;
         }
         G4cout <<"Error in choice random gauss distribution!! Seed = "<<seed<<G4endl;
@@ -358,8 +358,8 @@ void Bina_PrimaryGeneratorAction::Pos(void)
 
         bsgx = bfwhmx/(2.*sqrt(2.*log(2.)));
         bsgy = bfwhmy/(2.*sqrt(2.*log(2.)));
-        // tXplace,  tYplace,  tZplace, thigh read from geo.mac in cm and
-        // recalculated by Geant to mm; bfwhmx, bfwhmy read in default mm.
+// tXplace,  tYplace,  tZplace, thigh read from geo.mac in cm and
+// recalculated by Geant to mm; bfwhmx, bfwhmy read in default mm.
         vertex[0] = tXplace + RandomGauss(aj1bx,0, bsgx);
         vertex[1] = tYplace + RandomGauss(aj1by,0, bsgy);
         vertex[2] = tZplace - thigh + RandomFlat(ajbz)*2*thigh;
@@ -377,16 +377,16 @@ double* Bina_PrimaryGeneratorAction::elastic(double *ptot)
         pphi = CLHEP::pi*(2.* RandomFlat(aj1phi));
         fi1=pphi*180./CLHEP::pi;
 
-        if   (npd_choice == -1) pm = p_mass;  //proton
-        else if(npd_choice==-2) pm = d_mass;          //(npd_choice == -2)  //deuteron
+        if   (npd_choice == -1) pm = p_mass;//proton
+        else if(npd_choice==-2) pm = d_mass; //(npd_choice == -2)  //deuteron
         else pm=n_mass;
         bp1 = sqrt(bt*(bt + 2*pm));
-        ptot[2] = bp1*thcos;  //ptot1(3)
+        ptot[2] = bp1*thcos; //ptot1(3)
         bpproj = sqrt(bp1*bp1 - ptot[2]*ptot[2]);
         ptot[0] = bpproj*cos(pphi); //ptot1(1)
         ptot[1] = bpproj*sin(pphi); //ptot1(2)
         bt1 = bt;
-        //rs  t1 = 180./pi*themin;
+//rs  t1 = 180./pi*themin;
         return ptot;
 }
 
@@ -394,7 +394,7 @@ double* Bina_PrimaryGeneratorAction::upunif(double *ptot)
 {
         double ptot1[3],ptot2[3],bp1=0.,bp2=0.,bpproj; // auxillary variable
         double thcosm,thcos0;
-        //,thcosm2,thcos02,
+//,thcosm2,thcos02,
         double thcos,thcos2,pphi; // auxillary variable
         double *w_bp1,*w_bp2;
 
@@ -415,9 +415,9 @@ double* Bina_PrimaryGeneratorAction::upunif(double *ptot)
 //  thcos02 = cos(themin2*CLHEP::pi/180.);
 
         thcos = thcosm + (thcos0 - thcosm)*RandomFlat(aj1theta);
-        //rs pphi = pi*(2.*RandomFlat(aj1phi)-1.);
+//rs pphi = pi*(2.*RandomFlat(aj1phi)-1.);
         pphi = CLHEP::pi*(2.*RandomFlat(aj1phi));
-        //G4cout <<"thcos : "<<thcos<<G4endl;
+//G4cout <<"thcos : "<<thcos<<G4endl;
         thcos2 = gelkin(thcos,w_bp1,w_bp2); //elastic kinematics
 
         bt1 = sqrt(pm*pm + bp1*bp1) - pm;
@@ -436,7 +436,7 @@ double* Bina_PrimaryGeneratorAction::upunif(double *ptot)
         t1 = 180./CLHEP::pi*acos(thcos);
         t2 = 180./CLHEP::pi*acos(thcos2);
 
-        //rs
+//rs
         fi1 =   pphi*180/CLHEP::pi;
         fi2 = fi1+180.;
         if(fi2>360) fi2=fi2-360;
@@ -622,13 +622,13 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
 /***************************************************TTEESSTT
    for (l=0;l<4;l++)
-    {
-      for(k=0;k<14;k++)
-      {
-        for(j=0;j<13;j++)
-        {
-          for (i=55;i<75;i++)
-         {filell<<sig[l][k][j][i]<<G4endl;}}}}
+   {
+   for(k=0;k<14;k++)
+   {
+   for(j=0;j<13;j++)
+   {
+   for (i=55;i<75;i++)
+   {filell<<sig[l][k][j][i]<<G4endl;}}}}
  **********************************************************************/
 /*double test1a=30.,test2a,test3a,test4a;
    double* test1=&test1a;
@@ -639,23 +639,23 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
    for (i=0;i<180;i++) {
    for (j=0;j<300;j++) {
-    test5=dpb_kin3(double(i),test1,j/1000.,test2,test3,test4);
-    3<<test5<<' '<<i<<' '<<j<<' '<<test1a<<' '<<test2a<<' '<<test3a<<' '<<test4a<<G4endl;
+   test5=dpb_kin3(double(i),test1,j/1000.,test2,test3,test4);
+   3<<test5<<' '<<i<<' '<<j<<' '<<test1a<<' '<<test2a<<' '<<test3a<<' '<<test4a<<G4endl;
    //(double phi12,double *wphi13,double e1_0,double* we2_0,double* we3_0,double *bp_t)
-    }
+   }
    }
  */
         do
         {
                 nlop++;
-                // commented out for test4:
+// commented out for test4:
 
                 thcos1 = thcosm + (thcos0 - thcosm)*RandomFlat(aj1theta);
                 thcos2 = thcosm2 + (thcos02 - thcosm2)*RandomFlat(aj2theta);
                 theta1 = 180./CLHEP::pi*acos(thcos1);
                 theta2 = 180./CLHEP::pi*acos(thcos2);
 
-                //if (icros == 0)
+//if (icros == 0)
 //    {
 //      e1 = e1min + (etot - e1min)*RandomFlat(aj1ekin);
 //      e1_0 = e1 - pm;
@@ -668,20 +668,20 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
                 e_random=RandomFlat(aj1ekin);//zugefuegt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!30III10
                 s0 = generator_min+e_random*(generator_max-generator_min);
-                /////////   e1_1=0.005+(bt-0.005)*e_random; //extra IV2010
-                //G4cout<<bt<<' '<<e1min<<' '<<e1_1<<' '<<e1<<G4endl;
-                //filell<<"Etot "<<etot<<" E1min "<<e1min<<" diff "<<etot-e1min<<G4endl;
-                //    e1_0 = e1 - pm; deleted 26 april 2010
-                //  thcos1 = cos(theta1*pi/180.);
-                //  thcos2 = cos(theta2*pi/180.);
-                //    G4cout << " theta1= " << theta1  << " theta2= " << theta2 <<
-                //	      " phi12 " << phi12 <<G4endl;
+/////////   e1_1=0.005+(bt-0.005)*e_random; //extra IV2010
+//G4cout<<bt<<' '<<e1min<<' '<<e1_1<<' '<<e1<<G4endl;
+//filell<<"Etot "<<etot<<" E1min "<<e1min<<" diff "<<etot-e1min<<G4endl;
+//    e1_0 = e1 - pm; deleted 26 april 2010
+//  thcos1 = cos(theta1*pi/180.);
+//  thcos2 = cos(theta2*pi/180.);
+//    G4cout << " theta1= " << theta1  << " theta2= " << theta2 <<
+//	      " phi12 " << phi12 <<G4endl;
 
 
 // *****-----------------------------------------------------------*****//
 
 // for unpolarized c.s. phi1 can be generated uniformly
-                // rs if ((icros == 0) || ((pzz == 0) && (pz == 0))) phi1=-180+360*RandomFlat(aj1phi);
+// rs if ((icros == 0) || ((pzz == 0) && (pz == 0))) phi1=-180+360*RandomFlat(aj1phi);
 
                 if ((icros == 0) || ((pzz == 0) && (pz == 0))) phi1=360*RandomFlat(aj1phi);
 
@@ -691,17 +691,17 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                 {
 // find indexes of the cross section tables for interpolation procedures
 
-                        // for(t1=11.;t1<26.;t1+=0.5) {
-                        //  for (t2=11.;t2<26.;t2+=.5) {
-                        //   for (phi12=0.;phi12<=180.;phi12+=10.) {
-                        //   for (s0=0.;s0<.25;s0+=0.01) {
+// for(t1=11.;t1<26.;t1+=0.5) {
+//  for (t2=11.;t2<26.;t2+=.5) {
+//   for (phi12=0.;phi12<=180.;phi12+=10.) {
+//   for (s0=0.;s0<.25;s0+=0.01) {
                         x0[0] = t1;
                         x0[1] = t2;
                         x0[2] = phi12;
                         x0[3] = s0;
 
 //      filell<<"theta1 theta2 phi12 e1_0 niedergeschrievven\n";
-                        //filell<<"=== "<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
+//filell<<"=== "<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
                         for (i=0; i<4; i++)
                         {
                                 ind[i] = max(int((x0[i]-offs[i])/step[i]),1);
@@ -709,13 +709,13 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                 for (j=0; j<4; j++)
                                 {
                                         if(i == 0) x1a[j] = offs[i] + (ind[i] + j-1)*step[i];
-                                        //   filell<<t1<<' '<<x1a[j]<<' '<<x0[0]<<' '<<ind[i]<<G4endl;}
+//   filell<<t1<<' '<<x1a[j]<<' '<<x0[0]<<' '<<ind[i]<<G4endl;}
                                         if(i == 1) x2a[j] = offs[i] + (ind[i] + j-1)*step[i];
-                                        //   filell<<t2<<' '<<x2a[j]<<' '<<x0[1]<<' '<<ind[i]<<G4endl;}
+//   filell<<t2<<' '<<x2a[j]<<' '<<x0[1]<<' '<<ind[i]<<G4endl;}
                                         if(i == 2) x3a[j] = offs[i] + (ind[i] + j-1)*step[i];
-                                        //  filell<<phi12<<' '<<x3a[j]<<' '<<x0[2]<<' '<<ind[i]<<G4endl;}
+//  filell<<phi12<<' '<<x3a[j]<<' '<<x0[2]<<' '<<ind[i]<<G4endl;}
                                         if(i == 3) x4a[j] = offs[i] + (ind[i] + j)*step[i];
-                                        //  filell<<s0<<' '<<x4a[j]<<' '<<x0[3]<<' '<<ind[i]<<G4endl;}
+//  filell<<s0<<' '<<x4a[j]<<' '<<x0[3]<<' '<<ind[i]<<G4endl;}
                                 }
                         }
 //for (i=0;i<200;i++) {
@@ -744,7 +744,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                         }
                                 }
                         }
-                        //change matrix from [0..n-1] to [1..n]
+//change matrix from [0..n-1] to [1..n]
                         for (i=0; i<4; i++)
                         {
                                 x1a_r[i+1] = x1a[i];
@@ -771,12 +771,12 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 //    if(csi<0.)  filell<<"----- "<<csi<<' '<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
 /*    for(i=0;i<4;i++)
 
-      for(j=0;j<4;j++)
+   for(j=0;j<4;j++)
 
-        for(k=0;k<4;k++)
+   for(k=0;k<4;k++)
 
-          for(l=0;l<4;l++)
-    filell<<i<<' '<<j<<' '<<k<<' '<<l<<' '<<ya_r[i+1][j+1][k+1][l+1]<<G4endl;
+   for(l=0;l<4;l++)
+   filell<<i<<' '<<j<<' '<<k<<' '<<l<<' '<<ya_r[i+1][j+1][k+1][l+1]<<G4endl;
 
 
    }*/
@@ -824,10 +824,10 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                 phi1 = cspol(axi,ayi,axxi,axyi,ayyi);
                         }
                 }
-                // *************************************************//
-                // nowa procedura - gdy brak zgodnosci z kinematyka //
-                // losowana jest ponownie energia a nie katy        //
-                // *************************************************//
+// *************************************************//
+// nowa procedura - gdy brak zgodnosci z kinematyka //
+// losowana jest ponownie energia a nie katy        //
+// *************************************************//
 
                 G4int itry = 0;
 //    cout<<"przed: nlop "<<nlop<<"  theta1 "<<theta1<<"  theta2 "<<theta2<<"  phi12 "<<phi12<<endl;
@@ -869,7 +869,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                         e2_2=e2_0;
                         e1_2=e1_0;
                         signum=1;
-                        //     filell<<e1_0<<' '<<e2_0<<' '<<s<<' '<<icnn<<G4endl;
+//     filell<<e1_0<<' '<<e2_0<<' '<<s<<' '<<icnn<<G4endl;
                         for (int switcher=0; switcher<=2; switcher++) {
                                 if(switcher==2)
                                 {
@@ -893,25 +893,25 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                         e1_1=e1_0;
                                         e2_1=e2_0;
                                         e2_0+=signum*paramS;
-                                        //  filell<<e1_0<<' ';
+//  filell<<e1_0<<' ';
                                         dpb_kin3(switcher,phi12,w_phi13,e2_0,w_e1_0,w_e3_0,bp);
                                         deltaE1=fabs(e1_0-e1_1);
                                         deltaE2=fabs(e2_0-e2_1);
-                                        //    filell<<"Deltae1,e2 erste "<<deltaE1<<' '<<deltaE2;
+//    filell<<"Deltae1,e2 erste "<<deltaE1<<' '<<deltaE2;
                                         deltaS=E(deltaE1,deltaE2);
-                                        //    filell<<' '<<deltaS<<G4endl;
+//    filell<<' '<<deltaS<<G4endl;
                                         paramS=0.000001*deltaE2/deltaS;
 
                                         e2_0=e2_1+signum*paramS;
-                                        //  filell<<e1_0<<' '<<G4endl;
+//  filell<<e1_0<<' '<<G4endl;
                                         icnn=dpb_kin3(switcher,phi12,w_phi13,e2_0,w_e1_0,w_e3_0,bp);
 //filell<<icnn<<G4endl;
                                         deltaE1=fabs(e1_0-e1_1);
                                         deltaE2=fabs(e2_0-e2_1);
 //      filell<<"Deltae1,e2 "<<deltaE1<<' '<<deltaE2;
                                         s+=E(deltaE1,deltaE2);
-                                        //   filell<<' '<<s0<<' '<<switcher<<' ';
-                                        //  filell<<e1_0<<' '<<e2_0<<' '<<s<<' ';
+//   filell<<' '<<s0<<' '<<switcher<<' ';
+//  filell<<e1_0<<' '<<e2_0<<' '<<s<<' ';
 //G4cout<<s<<' '<<s0<<G4endl;
                                         if (switcher==0) quest=fabs(e1_0-e2_0)<fabs(e1_1-e2_1);
                                         if (switcher==1) quest=s<s0-0.0000005&&icnn>1e-10;
@@ -930,7 +930,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 // break-up kinematics
                         icn = int(bool(icnn));//dpb_kin3(phi12,w_phi13,e1_0,w_e2_0,w_e3_0,bp);
 //filell<<icn<<' '<<phi12<<' '<<*w_phi13<<' '<<e1_0<<' '<<*w_e2_0<<' '<<*w_e3_0<<' '<<*bp<<' '<<"ICN"<<G4endl;
-                        //G4cout<<icn<<G4endl;
+//G4cout<<icn<<G4endl;
                 }
                 else {
                         itry=0;
@@ -983,8 +983,8 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
         ptot3[0] = bpproj*cos(phi3r);
         ptot3[1] = bpproj*sin(phi3r);
 
-        //t1 = thelab;
-        //t2 = 180./pi*acos(thcos2);
+//t1 = thelab;
+//t2 = 180./pi*acos(thcos2);
 
         for (i=0; i<3; i++)
         {
@@ -1003,7 +1003,7 @@ double Bina_PrimaryGeneratorAction::gelkin(double thcos, double *wbp1, double *w
 {  // output : bp1,bp2,thcos2
         double et,etp,beta,gamma,betsq,gamsq,rang3,sinth,sinsq; //auxillary variable
         double bp0,x1,x2,x3,x4,ep3c,ep4c,p3c,p4c,delta,a,b,c,test,coscm /*,thecm*/; //auxillary variable
-        double ep3l,ep4l,p3l,/*e3,e4,*/ p4l,cosang4;    //auxillary variable
+        double ep3l,ep4l,p3l,/*e3,e4,*/ p4l,cosang4; //auxillary variable
 //  double bej, ang4;
         double thcos2;
 
@@ -1070,7 +1070,7 @@ double Bina_PrimaryGeneratorAction::gelkin(double thcos, double *wbp1, double *w
 //  ang4 = acos(cosang4) * 180./CLHEP::pi;
         thcos2 = cosang4;
 
-        //G4cout<<"thcos : "<<ang4<<endl;
+//G4cout<<"thcos : "<<ang4<<endl;
         return thcos2;
 }
 
@@ -1096,7 +1096,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
 
 
         double r=0.,phi=0.,thta=0.,thta2_1=0.,etot=0.,phi2=0.,phi2_1=0.,phi13=0.,e1_0=0.,e3_0=0.,ff=0.,ph1r=0.,th1r=0.,ph2r=0.,th2r=0.,pol=0.,e1min=0.,e1=0. /*,e1max=0.*/;
-        // double p1=0.,p1x=0.,p1y=0.,p1z=0.,p2i3l=0.,p2i3ll=0.,e2i3=0.,a=0.,b=0.,c=0.,d=0.,delta=0.,e2p=0.,pp2=0.,e3=0.,pp3=0.,t3r=0.,cphi13=0.;
+// double p1=0.,p1x=0.,p1y=0.,p1z=0.,p2i3l=0.,p2i3ll=0.,e2i3=0.,a=0.,b=0.,c=0.,d=0.,delta=0.,e2p=0.,pp2=0.,e3=0.,pp3=0.,t3r=0.,cphi13=0.;
         double p1=0.,p1x=0.,p1y=0.,p1z=0.,p2i3l=0.,e2i3=0.,a=0.,b=0.,c=0.,d=0.,delta=0.,e2p=0.,pp2=0.,e3=0.,pp3=0.,t3r=0.,cphi13=0.;
         double uni2[3],p2i3[3],/*p2i3_1[3],*/ uni2_1[3],p2[3],e2[3],pt2[3],pt3[3],phi13r=0.;
 
@@ -1130,7 +1130,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
         ph2r = phi2*ff;
         th2r = t1*ff;
 
-        //G4cout <<"ph1r = "<<ph1r<<"\tth1r = "<<th1r<<"\tth2r = "<<th2r<<endl;
+//G4cout <<"ph1r = "<<ph1r<<"\tth1r = "<<th1r<<"\tth2r = "<<th2r<<endl;
 
 
 //  isum = 0;
@@ -1157,7 +1157,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
         p2i3[2] = -p1z + pol;
 
 
-        //p2i3ll = sqrt(p2i3[0]*p2i3[0] + p2i3[1]*p2i3[1] + p2i3[2]*p2i3[2]);
+//p2i3ll = sqrt(p2i3[0]*p2i3[0] + p2i3[1]*p2i3[1] + p2i3[2]*p2i3[2]);
         carsph(p2i3,w_p2i3l,w_thta,w_phi);
 //filell<<thta<<G4endl;			      //return thta
 //G4cout <<"p2i3 = "<<p2i3<<"\t   p2i3l = "<<p2i3l<<"\t   thta = "<< thta<<"\t   phi = "<<phi<<endl;
@@ -1174,7 +1174,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
 //filell<<r<<' '<<thta2_1<<' '<<th1r<<' '<<th2r<<' '<<ph1r<<' '<<ph2r<<' '<<thta<<' '<<thta-th2r<<' '<<th2r-thta<<G4endl;//test 19IV2010
 //if (fabs(r - 1.) > 1.e-3) {G4cout <<"3!!! = "<<fabs(r - 1.);exit(p2i3l);}
 
-        e2i3 = etot - e1;   // energy for p and n
+        e2i3 = etot - e1; // energy for p and n
         d = e2i3*e2i3 - p2i3l*p2i3l;
 //G4cout <<"d = "<<d <<"\t drugi = "<<(m2 + m3)*(m2 + m3)<<endl;
 //G4cout <<":2"<<endl;
@@ -1194,7 +1194,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
         e2[1] = E(p2[1],m2);
 
 //  if (chooser%2==0) chooser=0;
-        //output
+//output
         if (p2[0] >= 0.&&(typ==0||typ==2)) { e2p = e2[0]; pp2 = p2[0]; }
         else if (p2[1] >= 0.&&typ==1) { e2p = e2[1]; pp2 = p2[1]; }
         else return 0;
@@ -1371,11 +1371,11 @@ void Bina_PrimaryGeneratorAction::splint4(double *ya,double *y2a,
                                 splint(x4a_r,ya,y2a,m4,x4,&yytmp[l]);
                                 ya  += 5;
                                 y2a +=5;
-                                // for (jjj=1;jjj<=4;jjj++) filell<<"1-  "<<l <<' '<<ya[jjj]<<' '<<y2a[jjj]<<' '<<yytmp[jjj]<<G4endl;
+// for (jjj=1;jjj<=4;jjj++) filell<<"1-  "<<l <<' '<<ya[jjj]<<' '<<y2a[jjj]<<' '<<yytmp[jjj]<<G4endl;
                         }
                         spline(x3a_r,yytmp,m3,1.0e30,1.0e30,ytmp);
                         splint(x3a_r,yytmp,ytmp,m3,x3,&yyytmp[k]);
-                        //   for (jjj=1;jjj<=4;jjj++) filell<<"2- "<<k<<' '<<yytmp[jjj]<<' '<<ytmp[jjj]<<' '<<yyytmp[jjj]<<G4endl;
+//   for (jjj=1;jjj<=4;jjj++) filell<<"2- "<<k<<' '<<yytmp[jjj]<<' '<<ytmp[jjj]<<' '<<yyytmp[jjj]<<G4endl;
                 }
                 spline(x2a_r,yyytmp,m2,1.0e30,1.0e30,yytmp1);
                 splint(x2a_r,yyytmp,yytmp1,m2,x2,&ytmp1[j]);
@@ -1383,7 +1383,7 @@ void Bina_PrimaryGeneratorAction::splint4(double *ya,double *y2a,
         }
         spline(x1a_r,ytmp1,m1,1.0e30,1.0e30,yyytmp1);
         splint(x1a_r,ytmp1,yyytmp1,m1,x1,y);
-        //for (int j=1;j<=m1;j++) {filell<<"4- "<<ytmp1[j]<<' '<<yytmp1[j]<<' '<<y[j]<<G4endl;}
+//for (int j=1;j<=m1;j++) {filell<<"4- "<<ytmp1[j]<<' '<<yytmp1[j]<<' '<<y[j]<<G4endl;}
 //  filell<<"yyyyyyyyyy "<<*y<<G4endl;
         free_vector(yyytmp,1,m1);
         free_vector(yytmp,1,m1);
@@ -1408,8 +1408,8 @@ void Bina_PrimaryGeneratorAction::splint(double* xa,double* ya,double* y2a,int n
 
         klo = 1; //We will  nd the right place in the table by means of bisection.
         khi = n; //This is optimal if sequential calls to this routine are at random values of x.
-        //If sequential calls are in order, and closely spaced, one would do better to store
-        //previous values of klo and khi and test if they remain appropriate on the next call.
+//If sequential calls are in order, and closely spaced, one would do better to store
+//previous values of klo and khi and test if they remain appropriate on the next call.
         while (khi - klo > 1)
         {
                 k = (khi + klo) >> 1;
@@ -1421,7 +1421,7 @@ void Bina_PrimaryGeneratorAction::splint(double* xa,double* ya,double* y2a,int n
 //for (aa=0;aa<=4;aa++) {
 //  filell<<xa[aa]<<G4endl;}
         a = (xa[khi] - x)/h;
-        b = (x - xa[klo])/h;        //Cubic spline polynomial is now evaluated
+        b = (x - xa[klo])/h; //Cubic spline polynomial is now evaluated
 
         *y=a*ya[klo]+b*ya[khi]+((a*a*a-a)*y2a[klo]+(b*b*b-b)*y2a[khi])*(h*h)/6.0;
 //******************************************************************
@@ -1440,13 +1440,13 @@ void Bina_PrimaryGeneratorAction::splint(double* xa,double* ya,double* y2a,int n
 }
 void Bina_PrimaryGeneratorAction::spline(double x[], double y[], int n, double yp1, double ypn, double *y2)
 {
-        //Given arrays x[1..n] and y[1..n] containing a tabulated function, i.e., yi = f(xi),
-        //with x1 <x2 < :: : < xN, and given values yp1 and ypn for the  rst derivative of
-        //the interpolating function at points 1 and n, respectively, this routine returns an
-        //array y2[1..n] that contains the second derivatives of the interpolating function at
-        //the tabulated points xi. If yp1 and/or ypn are equal to 1   1030 or larger, the routine
-        //is signaled to set the corresponding boundary condition for a natural spline, with zero]
-        // second derivative on that boundary.
+//Given arrays x[1..n] and y[1..n] containing a tabulated function, i.e., yi = f(xi),
+//with x1 <x2 < :: : < xN, and given values yp1 and ypn for the  rst derivative of
+//the interpolating function at points 1 and n, respectively, this routine returns an
+//array y2[1..n] that contains the second derivatives of the interpolating function at
+//the tabulated points xi. If yp1 and/or ypn are equal to 1   1030 or larger, the routine
+//is signaled to set the corresponding boundary condition for a natural spline, with zero]
+// second derivative on that boundary.
 
         int i,k;
         double p,qn,sigl,un,*u;
@@ -1461,7 +1461,7 @@ void Bina_PrimaryGeneratorAction::spline(double x[], double y[], int n, double y
         }
 
         for (i=2; i<=n-1; i++)
-        {     //This is the decomposition loop of the tridiagonal algorithm
+        { //This is the decomposition loop of the tridiagonal algorithm
                 sigl=(x[i]-x[i-1])/(x[i+1]-x[i-1]); //y2 and u are used for temporary storage of the decomposed factors
                 p=sigl*y2[i-1]+2.0;
                 y2[i]=(sigl-1.0)/p;
@@ -1470,7 +1470,7 @@ void Bina_PrimaryGeneratorAction::spline(double x[], double y[], int n, double y
         }
         if (ypn > 0.99e30) //The upper boundary condition is set either to be natural
                 qn=un=0.0;
-        else    //or else to have a specified first derivative
+        else //or else to have a specified first derivative
         {
                 qn=0.5;
                 un=(3.0/(x[n]-x[n-1]))*(ypn-(y[n]-y[n-1])/(x[n]-x[n-1]));
@@ -1591,8 +1591,8 @@ void Bina_PrimaryGeneratorAction::break_read(void)
                                          >> axx[ith1][k][j][i] >> ayy[ith1][k][j][i] >> axn[ith1][k][j][i]
                                          >> axy[ith1][k][j][i] >> axz[ith1][k][j][i];
                                          if (sig[ith1][k][j][i]>csmax&&ith1<(themax-offs[0])/step[0]+1.&&
-                                            ith1>(themin-offs[0])/step[0]-1.&&k<(themax2-offs[1])/step[1]+1.&&
-                                            k>(themin2-offs[1])/step[1]-1.) csmax=sig[ith1][k][j][i];
+                                                                            ith1>(themin-offs[0])/step[0]-1.&&k<(themax2-offs[1])/step[1]+1.&&
+                                                                                                                k>(themin2-offs[1])/step[1]-1.) csmax=sig[ith1][k][j][i];
                                  }
                          }
                  }
@@ -1606,12 +1606,12 @@ void Bina_PrimaryGeneratorAction::break_read(void)
 
 void Bina_PrimaryGeneratorAction::set_threads(int n)
 {
-if(enable_omp)
+        if(enable_omp)
         {
                 threads_num = n;
                 omp_set_num_threads(threads_num);
         }
-else
+        else
         {
                 omp_set_num_threads(1);
         }

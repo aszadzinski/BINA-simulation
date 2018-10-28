@@ -16,17 +16,14 @@ class G4UIcmdWithoutParameter;
 
 class Bina_DetectorMessenger : public G4UImessenger
 {
-
-
-public:
+  public:
   Bina_DetectorMessenger(Bina_DetectorConstruction* Det);
   ~Bina_DetectorMessenger();
 
   void SetNewValue(G4UIcommand * command, G4String newValues);
 
-private:
+  private:
   Bina_DetectorConstruction* myDetector;
-
 
   G4UIdirectory*  geomDir;
   G4UIdirectory*  paramDir;
@@ -37,16 +34,14 @@ private:
   G4UIdirectory*  GeometryMwpcDir;
   G4UIdirectory*  GeometryFoilDir;
   G4UIdirectory*  generationDir;
-
   //////////////////////////////
   // Generation Parameters
   //////////////////////////////
-
-  G4UIcmdWithAnInteger* NpdChoiceCmd;
-  G4UIcmdWithAnInteger* IfNeumannCmd;
-  G4UIcmdWithAnInteger* NeutronElasticCmd;
-  G4UIcmdWithADouble* BfwhmX_Cmd;
-  G4UIcmdWithADouble* BfwhmY_Cmd;
+  G4UIcmdWithAnInteger*   NpdChoiceCmd;
+  G4UIcmdWithAnInteger*   IfNeumannCmd;
+  G4UIcmdWithAnInteger*   NeutronElasticCmd;
+  G4UIcmdWithADouble*   BfwhmX_Cmd;
+  G4UIcmdWithADouble*   BfwhmY_Cmd;
   G4UIcmdWithADoubleAndUnit* BtEnergyCmd;
   G4UIcmdWithADouble* Pz_Cmd;
   G4UIcmdWithADouble* Pzz_Cmd;
@@ -62,31 +57,26 @@ private:
   //////////////////////////////
   // Target
   //////////////////////////////
-
   G4UIcmdWithAnInteger* TargetIsCmd;
-  G4UIcmdWithADoubleAndUnit*TframeOutRadiusCmd;
-  G4UIcmdWithADoubleAndUnit*TargetOutRadiusCmd;
-  G4UIcmdWithADoubleAndUnit* TargetHighCmd;
+  G4UIcmdWithADoubleAndUnit*  TframeOutRadiusCmd;
+  G4UIcmdWithADoubleAndUnit*  TargetOutRadiusCmd;
+  G4UIcmdWithADoubleAndUnit*  TargetHighCmd;
   // Target placement
   G4UIcmdWithADoubleAndUnit* TargetXplaceCmd;
   G4UIcmdWithADoubleAndUnit* TargetYplaceCmd;
   G4UIcmdWithADoubleAndUnit* TargetZplaceCmd;
-
   //////////////////////////////
   //  Ball scintilators
   //////////////////////////////
-
   G4UIcmdWithAnInteger* BallIsCmd;
   G4UIcmdWithAnInteger* BallVisibleCmd;
   //Ball placement
   G4UIcmdWithADoubleAndUnit* BallXplaceCmd;
   G4UIcmdWithADoubleAndUnit* BallYplaceCmd;
   G4UIcmdWithADoubleAndUnit* BallZplaceCmd;
-
   //////////////////////////////
   //  Mwpc
   //////////////////////////////
-
   G4UIcmdWithAnInteger* MwpcIsCmd;
   G4UIcmdWithAnInteger* MwpcWisibleCmd;
 
@@ -100,11 +90,9 @@ private:
   G4UIcmdWithADoubleAndUnit* MwpcXplaceCmd;
   G4UIcmdWithADoubleAndUnit* MwpcYplaceCmd;
   G4UIcmdWithADoubleAndUnit* MwpcZplaceCmd;
-
   //////////////////////////////
   // Delta E
   //////////////////////////////
-
   G4UIcmdWithAnInteger* DeltaeIsCmd;
   G4UIcmdWithAnInteger* DeltaeVisibleCmd;
 
@@ -122,11 +110,9 @@ private:
   G4UIcmdWithADoubleAndUnit* DeltaeXplaceCmd;
   G4UIcmdWithADoubleAndUnit* DeltaeYplaceCmd;
   G4UIcmdWithADoubleAndUnit* DeltaeZplaceCmd;
-
   ///////////////////////////////
   //  Foil
   ///////////////////////////////
-
   G4UIcmdWithAnInteger* FoilIsCmd;
   G4UIcmdWithAnInteger* FoilVisibleCmd;
 
@@ -139,11 +125,9 @@ private:
   G4UIcmdWithADoubleAndUnit* FoilXplaceCmd;
   G4UIcmdWithADoubleAndUnit* FoilYplaceCmd;
   G4UIcmdWithADoubleAndUnit* FoilZplaceCmd;
-
   //////////////////////////////
   // Wall E Center scintilators
   //////////////////////////////
-
   G4UIcmdWithAnInteger* WallIsCmd;
   G4UIcmdWithAnInteger* WallVisibleCmd;
 
@@ -163,7 +147,6 @@ private:
   G4UIcmdWithADoubleAndUnit* WallCenterXplaceCmd;
   G4UIcmdWithADoubleAndUnit* WallCenterYplaceCmd;
   G4UIcmdWithADoubleAndUnit* WallCenterZplaceCmd;
-
   //////////////////////////////
   // Wall E L scintilators
   //////////////////////////////
@@ -174,5 +157,4 @@ private:
   // Wall placement
   G4UIcmdWithADoubleAndUnit* WallDimSCmd;
 };
-
 #endif

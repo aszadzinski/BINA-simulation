@@ -1,5 +1,3 @@
-
-
 struct MyOMP
 {
 	bool ompON;
