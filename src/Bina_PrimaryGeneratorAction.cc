@@ -40,7 +40,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
 
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
-        npd_choice = myDC->GetNpdChoice();
+        npd_choice = 2;//myDC->GetNpdChoice();
         icros=myDC->GetNeumann();
         bfwhmx = myDC->GetBfwhmX();
         bfwhmy = myDC->GetBfwhmY();
@@ -199,7 +199,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
                 }
 #pragma omp barrier
-#pragma omp master
+#pragma omp single
         {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
@@ -235,7 +235,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                         }
                 }
 #pragma omp barrier
-#pragma omp master
+#pragma omp single
                 {
                         particleGun1->GeneratePrimaryVertex(anEvent);
                         particleGun2->GeneratePrimaryVertex(anEvent);
@@ -280,7 +280,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
         }
 #pragma omp barrier
-#pragma omp master
+#pragma omp single
         {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
@@ -726,6 +726,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
 //      filell<<"theta1 theta2 phi12 e1_0 niedergeschrievven\n";
 //filell<<"=== "<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
+#pragma omp parallel for schedule(static,1)  //+7%
                         for (i=0; i<4; i++)
                         {
                                 ind[i] = max(int((x0[i]-offs[i])/step[i]),1);
@@ -748,7 +749,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
 // interpolations
 //   - of 'unpolarized' cross section
-
+#pragma omp parallel for schedule(static,1)
                         for(i=0; i<4; i++)
                         {
                                 for(j=0; j<4; j++)
@@ -767,20 +768,26 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                                 }
                                         }
                                 }
-                        }
-//change matrix from [0..n-1] to [1..n]
-                        for (i=0; i<4; i++)
-                        {
                                 x1a_r[i+1] = x1a[i];
                                 x2a_r[i+1] = x2a[i];
                                 x3a_r[i+1] = x3a[i];
                                 x4a_r[i+1] = x4a[i];
                         }
+//change matrix from [0..n-1] to [1..n]
+                        /*for (i=0; i<4; i++)
+                        {
+                                x1a_r[i+1] = x1a[i];
+                                x2a_r[i+1] = x2a[i];
+                                x3a_r[i+1] = x3a[i];
+                                x4a_r[i+1] = x4a[i];
+                        }*/
 
                         for (i=0; i<4; i++)
                                 for (j=0; j<4; j++)
                                         for (k=0; k<4; k++)
-                                                for (l=0; l<4; l++) {ya_r[i+1][j+1][k+1][l+1]=ya[i][j][k][l];
+                                                for (l=0; l<4; l++)
+                                                {
+                                                        ya_r[i+1][j+1][k+1][l+1]=ya[i][j][k][l];
 //filell<<i<<' '<<j<<' '<<k<<' '<<l<<' '<<ya_r[i+1][j+1][k+1][l+1]<<G4endl;
                                                 }
                         csi = rinterp(ya_r,x0[0],x0[1],x0[2],x0[3]);
