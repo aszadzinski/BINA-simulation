@@ -40,7 +40,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
 
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
-        npd_choice = 0;//myDC->GetNpdChoice();
+        npd_choice = myDC->GetNpdChoice();
         icros=myDC->GetNeumann();
         bfwhmx = myDC->GetBfwhmX();
         bfwhmy = myDC->GetBfwhmY();
@@ -181,6 +181,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
 #pragma omp parallel if(mp->threads_num)
+{
 #pragma omp sections
                 {
 #pragma omp section
@@ -198,8 +199,12 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
                 }
 #pragma omp barrier
+#pragma omp master
+        {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
+        }
+}
         }
         else if (npd_choice == 1)
         {
@@ -213,6 +218,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAnglePhi(fi1,fi2);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
 #pragma omp parallel if(mp->threads_num)
+{
 #pragma omp sections
                 {
 #pragma omp section
@@ -229,11 +235,12 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                         }
                 }
 #pragma omp barrier
+#pragma omp master
                 {
                         particleGun1->GeneratePrimaryVertex(anEvent);
                         particleGun2->GeneratePrimaryVertex(anEvent);
                 }
-
+}
         }
 
         else //(npd_choice == 2)
@@ -247,24 +254,41 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1,t2,t3);
                 GetStartAnglePhi(fi1,fi2,fi3);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-
+#pragma omp parallel if(mp->threads_num)
+{
+#pragma omp sections
+        {
+#pragma omp section
+                {
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-                particleGun3->SetParticleMomentumDirection(G4ThreeVector(momentum[6],momentum[7],momentum[8]));
-
                 particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
-                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
-                particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
-
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-                particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                }
 
+#pragma omp section
+                {
+                particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
+                particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+                }
+#pragma omp section
+                {
+                particleGun3->SetParticleMomentumDirection(G4ThreeVector(momentum[6],momentum[7],momentum[8]));
+                particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
+                particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+                }
+
+        }
+#pragma omp barrier
+#pragma omp master
+        {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
                 particleGun3->GeneratePrimaryVertex(anEvent);
+        }
 //    chooser++;
 //filell.close();
+}
         }
 }
 
