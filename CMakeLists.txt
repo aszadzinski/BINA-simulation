@@ -37,6 +37,7 @@ foreach(_script ${BINA_SCRIPTS})
     )
 endforeach()
 
+file(COPY ${PROJECT_SOURCE_DIR}/data DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/ )
 
 add_custom_target(BINA DEPENDS bina_run)
 find_package(OpenMP)
