@@ -10,6 +10,7 @@
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/Ranlux64Engine.h"
 
+#include "G4UIcommand.hh"
 
 class Bina_DetectorConstruction;
 class G4ParticleGun;

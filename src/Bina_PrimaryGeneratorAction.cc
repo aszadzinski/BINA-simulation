@@ -764,6 +764,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                                         if (kk>=13) kk=24-kk; //up to 12 and down
                                                         ll = ind[3] + l-1;
                                                         ya[i][j][k][l] = sig[ii][jj][kk][ll];
+                                                        ya_r[i+1][j+1][k+1][l+1]=ya[i][j][k][l];
 //if (i==2&&j==2&&k==2&&l==2) filell<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<' '<<ii<<' '<<jj<<' '<<kk<<' '<<ll<<' '<<sig[ii][jj][kk][ll]<<' '<<ya[i][j][k][l]<<G4endl;
                                                 }
                                         }
@@ -781,7 +782,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                 x3a_r[i+1] = x3a[i];
                                 x4a_r[i+1] = x4a[i];
                         }*/
-
+/*
                         for (i=0; i<4; i++)
                                 for (j=0; j<4; j++)
                                         for (k=0; k<4; k++)
@@ -789,7 +790,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                                 {
                                                         ya_r[i+1][j+1][k+1][l+1]=ya[i][j][k][l];
 //filell<<i<<' '<<j<<' '<<k<<' '<<l<<' '<<ya_r[i+1][j+1][k+1][l+1]<<G4endl;
-                                                }
+}*/
                         csi = rinterp(ya_r,x0[0],x0[1],x0[2],x0[3]);
                         if (csilocmax<csi) {csilocmax=csi;
                                             toSix++;
@@ -819,6 +820,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 //   - of analysing powers
                         if((pzz != 0)&&(pzz != 0))
                         {
+#pragma omp parallel for schedule(static, 1)
                                 for(i=0; i<4; i++)
                                 {
                                         for(j=0; j<4; j++)
@@ -901,6 +903,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                         e1_2=e1_0;
                         signum=1;
 //     filell<<e1_0<<' '<<e2_0<<' '<<s<<' '<<icnn<<G4endl;
+#pragma omp parallel for schedule(static,1)
                         for (int switcher=0; switcher<=2; switcher++) {
                                 if(switcher==2)
                                 {
@@ -917,8 +920,9 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                                                 e2_0=0;
                                                 e3_0=0;
                                         }
-                                        break;
+                                        switcher=4;
                                 }
+                                else{
                                 do {
 //if (switcher==2) G4cout<<e1_0<<' '<<e2_0<<' '<<s<<' '<<icnn<<G4endl;
                                         e1_1=e1_0;
@@ -951,6 +955,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 //if (switcher==2) G4cout<<"+++ "<<s<<' '<<s0<<"\n";
 //if (quest==0) filell<<s<<' '<<s0<<' '<<s0-0.0000005<<' '<<icnn<<G4endl;
                                 } while (quest);
+                        }
 //G4cout<<switcher<<' '<<e1_0<<' '<<e2_0<<G4endl;
                         }
 //G4cout<<"Hier gibts ne Information "<<e1_0<<' '<<e2_0<<G4endl;
@@ -1603,19 +1608,26 @@ void Bina_PrimaryGeneratorAction::break_read(void)
         }
         ith1 = 0;
         ok = 1;
+//#pragma omp parallel for schedule(static,1) firstprivate(ok)
         for (l=0; l<4; l++)
         {ok=1;
+
          do
-         {
+         {//#pragma omp critical
                  for(k=0; k<14; k++)
                  {
-                         if (ok == 0) break;
+
+                         if (ok != 0)
+                         {
                          for(j=0; j<13; j++)
                          {
                                  file[l].ignore(100,10);
                                  file[l].ignore(100,10);
                                  file[l]>>ns;
-                                 if(file[l].eof()) {ok = 0; break;}
+
+                                 if(!file[l].eof()) {
+                                // #pragma omp parallel
+                                // #pragma omp for schedule(static,1) private()
                                  for (i=0; i<ns; i++)
                                  {
                                          file[l] >> sig[ith1][k][j][i] >> ayn[ith1][k][j][i] >> ayd[ith1][k][j][i]
@@ -1625,6 +1637,16 @@ void Bina_PrimaryGeneratorAction::break_read(void)
                                                                             ith1>(themin-offs[0])/step[0]-1.&&k<(themax2-offs[1])/step[1]+1.&&
                                                                                                                 k>(themin2-offs[1])/step[1]-1.) csmax=sig[ith1][k][j][i];
                                  }
+                                }
+                                else
+                                {ok = 0;
+                                //G4cout<<"else2"<<G4endl;
+                        }
+                         }
+                         }
+                         else
+                         {
+                                //G4cout<<"else2"<<G4endl ;
                          }
                  }
                  ith1++;
