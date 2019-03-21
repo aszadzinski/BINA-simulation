@@ -2,6 +2,6 @@
 
 rm CMakeCache.txt
 
-cmake -DGeant4_Dir= ~/Downloads/geant4-install/lib64/Geant4-10.4.2 ~/Projects/BINA
+cmake -DGeant4_Dir= ~/Downloads/geant4-install/lib64/Geant4-10.4.2 ~/Projects/study/bina-simulation/BINA
 
 make -j4

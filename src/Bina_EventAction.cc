@@ -43,10 +43,12 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
         }
 }
 
-/*
+
    void Bina_EventAction::EndOfEventAction(const G4Event* evt)
    {
 
+        G4int evtNb = evt->GetEventID();
+/*
    NOTE G4cout outputs mix each other
 
    G4int evtNb = evt->GetEventID();
@@ -64,5 +66,5 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
    }
    }
    }
-   }
  */
+   }

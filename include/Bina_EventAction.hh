@@ -16,7 +16,7 @@ class Bina_EventAction : public G4UserEventAction
 
 public:
         virtual void BeginOfEventAction(const G4Event*);
-        //virtual void   EndOfEventAction(const G4Event*);
+        virtual void   EndOfEventAction(const G4Event*);
         MyOMP* mp;
 
 inline static int getNb(int num = -1 )

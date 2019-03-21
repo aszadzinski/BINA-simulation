@@ -20,6 +20,8 @@
 ##/vis/modeling/trajectories/drawByCharge-0/default/detDrawStepPts true
 ##/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 3
 #/vis/scene/endOfEventAction accumulate
-/run/beamOn 160002
+/run/beamOn 200
+
+/run/beamOn 300
 #####wszystkie runy +2
 #/run/beamOn 1

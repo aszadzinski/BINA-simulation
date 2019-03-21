@@ -40,7 +40,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
 
         generator_min=myDC->GetKinematicsMin();
         generator_max=myDC->GetKinematicsMax();
-        npd_choice = 2;//myDC->GetNpdChoice();
+        npd_choice = myDC->GetNpdChoice();
         icros=myDC->GetNeumann();
         bfwhmx = myDC->GetBfwhmX();
         bfwhmy = myDC->GetBfwhmY();
