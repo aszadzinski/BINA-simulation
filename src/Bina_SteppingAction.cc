@@ -24,7 +24,13 @@ Bina_SteppingAction::Bina_SteppingAction(Bina_PhysicsList* myPL)
   : myPhysicsList(myPL)
 {
 
-  file_types=myPL->GetFileOutputs();
+  file_types=4;//myPL->GetFileOutputs();
+
+  G4cout<<"================"<<G4endl;
+  G4cout<<"================"<<G4endl;
+  G4cout<<"FILE---->"<<file_types<<G4endl;
+  G4cout<<"================"<<G4endl;
+  G4cout<<"================"<<G4endl;
   if (file_types&1)
     file.open("./Bina_out1.dat");
   if (file_types&2)
@@ -127,7 +133,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           sigma_res = 0.14*sqrt(tab[11])+0.07;
           edet = CLHEP::RandGauss::shoot(tab[11],sigma_res);
           //edet = RandomGauss(aj1r1,tab[11],sigma_res);
-      
+
           if (edet<0) edet = 0;
           tab[11] = edet;
         }
@@ -141,7 +147,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           tab[13] = edet;
         }
 
-        if (file_types&1) 
+        if (file_types&1)
         {
           file <<G4endl;
           // write to file Bina.dat
@@ -156,7 +162,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           }
         }
       // write to file Bina_ext.dat
-        if (file_types&2) 
+        if (file_types&2)
         {
           file2 <<G4endl;
           file2 << std::setw(7)<<tab[0];
@@ -169,13 +175,13 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 //        G4cout<<index1<<' '<<index0<<'\n';
         if (file_types&4)
         {
-          if (Bina_PrimaryGeneratorAction::GetChoice()==2) 
+          if (Bina_PrimaryGeneratorAction::GetChoice()==2)
           {
             if (tab[1]==1) {tab[11]=secProtEnergy; tab[12]=secProtDetNr;}
             if (tab[0]!=index0) {
 //    G4cout<<(Bina_PrimaryGeneratorAction::GetChoice()==2&&((tab[0]!=index0&&index1!=0)||(index1==0&&tab[1]==2)))<<'\<';
           index0=(int)tab[0];
-          for (i=index1;i<3;i++) {    
+          for (i=index1;i<3;i++) {
             file3<<std::setw(17)<<tab[0]<<std::setw(4)<<0<<std::setw(4)
             <<0<<std::setw(4)<<0<<std::setw(15)<<0
             <<std::setw(15)<<0<<std::setw(15)<<0
@@ -184,7 +190,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           index1=0;
           file3<<G4endl;
           }
-       
+
         if (index1==0&&tab[1]==2) {
           file3<<std::setw(17)<<tab[0]<<std::setw(4)<<0<<std::setw(4)
           <<0<<std::setw(4)<<0<<std::setw(15)<<0
@@ -230,7 +236,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 
   if (tab[1])
   {
-      
+
     if(thePrePVname(0,8)=="Target_p"&&theTrack->GetParentID()==0)
     {
       theLastPVname = thePrePVname;
@@ -296,7 +302,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
     {
       once = 0;
       tab[2]++;
-      theLastPVname = thePrePVname;      
+      theLastPVname = thePrePVname;
     }
 
 ///////////////////////
@@ -309,15 +315,15 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 ///   dE   dE   dE   dE
 ///////////////////////
 
-  if(thePostPVname(0,7)=="DeltaE_" || thePrePVname(0,7)=="DeltaE_") // step in DeltaE 
-    //    if(thePrePVname(0,7)=="DeltaE_") // full step in DeltaE 
+  if(thePostPVname(0,7)=="DeltaE_" || thePrePVname(0,7)=="DeltaE_") // step in DeltaE
+    //    if(thePrePVname(0,7)=="DeltaE_") // full step in DeltaE
     {
-      if (bound==1 
-		  &&   (thePrePVname(0,7)!="DeltaE_" // first step in this DeltaE 
+      if (bound==1
+		  &&   (thePrePVname(0,7)!="DeltaE_" // first step in this DeltaE
 		||thePreCopyNo != theLastCopyNo ))
 	{
 	  if(theTrack->GetParentID()==0)  //only primaries!
-	    {     
+	    {
 		{
 		  if(tab[3]==0||(tab[3]==1&&thePreCopyNo!= theLastCopyNo ))tab[3]++;
 		  if(tab[3]==2)ilosc=1;
@@ -334,14 +340,14 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 	  tab2[3 + 2*ilosc] = theTrack->GetKineticEnergy();
 	  theLastPVname = thePrePVname;
 	  theLastCopyNo = thePreCopyNo;
-	} 
-      if(thePrePVname(0,7)=="DeltaE_")tab[7 + 2*ilosc] += theStep->GetTotalEnergyDeposit(); 
-      
+	}
+      if(thePrePVname(0,7)=="DeltaE_")tab[7 + 2*ilosc] += theStep->GetTotalEnergyDeposit();
+
     }
 ///////////////////////
 ///   E   E   E   E
 ///////////////////////
-  
+
 /*   if(thePrePVname(0,5)=="EDet_"&&theTrack->GetParentID()==0) {
      if(thePostPVname(0,5)!="EDet_") {
         tab[12]=thePreCopyNo;
@@ -353,14 +359,14 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 /*if(thePrePVname!=thePostPVname) {G4cout<<thePrePVname<<" kopia nr "<<thePreCopyNo<<' '<<thePostPVname<<" kopianr"<<thePostCopyNo
 <<' '<<SNumber<<'\n';}*/
 
-    if(thePostPVname(0,5)=="EDet_" || thePrePVname(0,5)=="EDet_") // step in E 
+    if(thePostPVname(0,5)=="EDet_" || thePrePVname(0,5)=="EDet_") // step in E
       {
-	// first step in the given E 
-	if (bound==1 
+	// first step in the given E
+	if (bound==1
 	  && (thePrePVname(0,5)!="EDet_" ||thePreCopyNo != theLastCopyNo))
 	  {
 	    if(theTrack->GetParentID()==0)   //only primaries!
-	      {  
+	      {
 		{
 		  if(tab[4]==0||(tab[4]==1&&thePreCopyNo!= theLastCopyNo ))
 		    tab[4]++;
@@ -373,22 +379,22 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 	      }
 	  }
 	if(theTrack->GetParentID()==0) //only primaries!
-	  {     
+	  {
 	    tab2[7 + 2*ilosc] = theTrack->GetKineticEnergy();
             theLastPVname = thePrePVname;
             theLastCopyNo = thePreCopyNo;
-	  } 
-        if(thePrePVname(0,5)=="EDet_")tab[11 + 2*ilosc] += theStep->GetTotalEnergyDeposit(); 
+	  }
+        if(thePrePVname(0,5)=="EDet_")tab[11 + 2*ilosc] += theStep->GetTotalEnergyDeposit();
 
         //G4cout<<ParticleType->GetParticleName()<<G4endl;
-        if(theTrack->GetParentID()>0 && prevParentName(0,7)=="neutron" && ParticleType == G4Proton::ProtonDefinition()) 
+        if(theTrack->GetParentID()>0 && prevParentName(0,7)=="neutron" && ParticleType == G4Proton::ProtonDefinition())
           {
 	     if(thePrePVname(0,5)=="EDet_")secProtDetNr = thePreCopyNo;
              if(thePrePVname(0,5)!="EDet_")secProtDetNr = thePostCopyNo;
              secProtEnergy+=theStep->GetTotalEnergyDeposit();
           }
       }
-    //////////////////////////////////////////////////////////////    
+    //////////////////////////////////////////////////////////////
 
     // then suspend the track
     theTrack->SetTrackStatus(fSuspend);

@@ -9,6 +9,8 @@
 //#include "CLHEP/Random/RandGaussQ.h"
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/Ranlux64Engine.h"
+#include "g4root.hh"
+#include "G4LorentzVector.hh"
 
 
 class Bina_DetectorConstruction;
@@ -132,6 +134,9 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void ugelast_read(void);
     void break_read(void);
 
+
+
+	void kinematic(double, double, double,double,double);
     double gelkin(double,double*,double*);  // elastic kinematics
     double rinterp(double [5][5][5][5], double, double, double, double);
     double cspol(double,double,double,double,double);
@@ -167,5 +172,3 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
 #endif
-
-

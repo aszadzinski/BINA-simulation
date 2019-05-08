@@ -8,6 +8,7 @@
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 
+
 #include <fstream>
 #include "Randomize.hh"
 //#include "Ranlux64Engine.h"
@@ -37,16 +38,23 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   #include "Bina_Detector.cfg"
   generator_min=myDC->GetKinematicsMin();
   generator_max=myDC->GetKinematicsMax();
-  npd_choice = myDC->GetNpdChoice(); 
+  npd_choice = 2;//myDC->GetNpdChoice();
+  kinematic(1.0,1.0,160.0,1875.613,938.2720813);
+  G4cout<<"================"<<G4endl;
+  G4cout<<"================"<<G4endl;
+  G4cout<<"================"<<G4endl;
+  G4cout<<"NPD--->"<<npd_choice<<G4endl;
+  G4cout<<"================"<<G4endl;
+  G4cout<<"================"<<G4endl;
   icros=myDC->GetNeumann();
-  bfwhmx = myDC ->GetBfwhmX();    
-  bfwhmy = myDC->GetBfwhmY();   
+  bfwhmx = myDC ->GetBfwhmX();
+  bfwhmy = myDC->GetBfwhmY();
   bt = myDC->GetBtEnergy();
   pz = myDC->GetPz() ;
   pzz = myDC->GetPzz() ;
-  themin = myDC->GetThetaMin()*180/M_PI; 
-  themax = myDC->GetThetaMax()*180/M_PI; 
-  themin2 = myDC->GetTheta2Min()*180/M_PI ; 
+  themin = myDC->GetThetaMin()*180/M_PI;
+  themax = myDC->GetThetaMax()*180/M_PI;
+  themin2 = myDC->GetTheta2Min()*180/M_PI ;
   themax2 = myDC->GetTheta2Max()*180/M_PI ;
   fimin = myDC->GetPhiMin()*180/M_PI ;
   fimax = myDC->GetPhiMax()*180/M_PI ; G4cout<<"\n";
@@ -101,6 +109,24 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
     particleGun2->SetParticleDefinition(particle);
   }
   else if (npd_choice == 2)
+  {
+    //filell.open("fileoutput.txt",ios::out|ios::app);
+    break_read();			//read cross table and analysing power
+    particleGun1 = new G4ParticleGun(n_particle);
+    particleGun2 = new G4ParticleGun(n_particle);
+    particleGun3 = new G4ParticleGun(n_particle);
+
+    particle = particleTable->FindParticle("proton");
+    particleGun1->SetParticleDefinition(particle);
+
+    G4ParticleDefinition* particle2 = particleTable->FindParticle("proton");
+    particleGun2->SetParticleDefinition(particle2);
+
+    particle = particleTable->FindParticle("neutron");
+    particleGun3->SetParticleDefinition(particle);
+
+  }
+  else if (npd_choice == 3)
   {
     //filell.open("fileoutput.txt",ios::out|ios::app);
     break_read();			//read cross table and analysing power
@@ -206,7 +232,37 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun2->GeneratePrimaryVertex(anEvent);
 
   }
-  else //(npd_choice == 2)
+  else if (npd_choice == 2)
+  {
+    //filell.open("fileoutput.txt",ios::out|ios::app);
+    //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+    ugbreak(momentum);
+    Pos();
+
+    GetStartEnergy(bt1*1000.,bt2*1000.,bt3*1000.);
+    GetStartAngleTheta(t1,t2,t3);
+    GetStartAnglePhi(fi1,fi2,fi3);
+    GetStartPosition(vertex[0],vertex[1],vertex[2]);
+
+    particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
+    particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
+    particleGun3->SetParticleMomentumDirection(G4ThreeVector(momentum[6],momentum[7],momentum[8]));
+
+    particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
+    particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
+    particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
+
+    particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+    particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+    particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+
+    particleGun1->GeneratePrimaryVertex(anEvent);
+    particleGun2->GeneratePrimaryVertex(anEvent);
+    particleGun3->GeneratePrimaryVertex(anEvent);
+//    chooser++;
+    //filell.close();
+  }
+  else if (npd_choice == 3)
   {
     //filell.open("fileoutput.txt",ios::out|ios::app);
     //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
@@ -238,6 +294,82 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   }
 }
 
+void Bina_PrimaryGeneratorAction::kinematic (double alpha, double beta, double beamEnergy=160,  double beamMass=1875.613, double targetMass=938.2720813)
+{
+const double mp=938.2720813;
+const double mn=939.5654133;
+const double md=1875.613;
+double p_plusCMarr[4];
+
+double beamMoment=sqrt(beamEnergy*beamEnergy+2.*beamMass*beamEnergy);
+double betaLAB=beamMoment/(sqrt(pow(beamMoment,2)+pow(beamMass,2)));
+double Ecm=sqrt(2*targetMass*beamEnergy+targetMass*targetMass+beamMass*beamMass);
+double betaCM=beamMoment/(sqrt(pow(beamMoment,2)+pow(beamMass,2))+targetMass);//beam beta in CM
+
+const G4ThreeVector b(0,0,betaCM);
+const G4ThreeVector bLAB(0,0,betaLAB);
+G4LorentzVector beam(0,0,beamMoment,sqrt(pow(beamMoment,2)+pow(beamMass,2)));
+G4LorentzVector target(0,0,0,targetMass);
+G4LorentzVector beamCM(0,0,beamMoment*targetMass/Ecm,sqrt(pow(beamMoment*targetMass/Ecm,2)+pow(beamMass,2)));
+beamCM.boost((bLAB-b));
+beam.boost(-b);
+target.boost(-b);
+
+
+double beamEnergyCM=beam.e();
+double targetEnergyCM=sqrt(pow(beam.Z,2)+pow(targetMass,2));
+double deuteriumBindingE=0.;//-2.22452; //positive if breakup is exoergic, usually negative!
+//double binding=deuteriumBindingE;
+
+double totalEnergy=beamEnergyCM+targetEnergyCM+deuteriumBindingE;
+double totalKinEnergy=totalEnergy-targetMass-beamMass;
+double pCM=beam.z();
+
+
+double pSS=
+ sqrt(5.*md*md/9. + mn*mn/3. - 7.*mp*mp/9. + 10.*pCM*pCM/9. +10./9.*sqrt(md*md+pCM*pCM)*sqrt(mp*mp+pCM*pCM) - //alternative - instead of +
+ 1./18.* sqrt(64. *md*md*md*md +192.*md*md*mn*mn+192.*md*md*mp*mp+192.*mn*mn*mp*mp-128.*mp*mp*mp*mp+512.*md*md*pCM*pCM+384.*mn*mn*pCM*pCM +
+ 128.*mp*mp*pCM*pCM+512.*pCM*pCM*pCM*pCM+256.*md*md*sqrt(md*md+pCM*pCM)*sqrt(mp*mp+pCM*pCM)+384.*mn*mn*sqrt(md*md+pCM*pCM)*sqrt(mp*mp+pCM*pCM)-
+ 128.*mp*mp*sqrt(md*md+pCM*pCM)*sqrt(mp*mp+pCM*pCM)+512.*pCM*pCM*sqrt(md*md+pCM*pCM)*sqrt(mp*mp+pCM*pCM)
+ ));
+
+
+double eSS=2*sqrt(pSS*pSS+mp*mp)+sqrt(pSS*pSS+mn*mn)-2*mp-mn;
+
+if (eSS<0) {G4cout<<"Negative energy -- increase beam energy\n";}
+
+double totalMomentumCM=pSS;
+
+
+G4LorentzVector *p1=new G4LorentzVector(0,-totalMomentumCM,0,sqrt(pow(totalMomentumCM,2)+pow(mp,2)));
+G4LorentzVector *p2=new G4LorentzVector(0,-totalMomentumCM,0,sqrt(pow(totalMomentumCM,2)+pow(mp,2)));
+p1->rotateZ(2.*3.1415/3.);
+p2->rotateZ(-2.*3.1415/3.);
+G4LorentzVector *n=new G4LorentzVector(0,-totalMomentumCM,0,sqrt(pow(totalMomentumCM,2)+pow(mn,2)));
+
+
+p1->rotateZ(3.1415*beta/180.);
+p2->rotateZ(3.1415*beta/180.);
+n->rotateZ(3.1415*beta/180.);
+p1->rotateX(3.1415*(alpha+90.)/180.);
+p2->rotateX(3.1415*(alpha+90.)/180.);
+n->rotateX(3.1415*(alpha+90.)/180.);
+
+
+p1->boost(b);//transform to beam reference frame
+p2->boost(b);
+n->boost(b);
+
+G4cout<<p1->theta()*180/3.1415<<' '<<p1->phi()*180/3.1415<<' '<<p1->e()-mp<<' '<<p1->px()<<' '<<p1->py()<<' '<<p1->pz()<<G4endl;
+G4cout<<p2->theta()*180/3.1415<<' '<<p2->phi()*180/3.1415<<' '<<p2->e()-mp<<G4endl;;
+G4cout<<n->theta()*180/3.1415<<' '<<n->phi()*180/3.1415<<' '<<n->e()-mn<<G4endl;;
+
+
+
+}
+
+
+
 void Bina_PrimaryGeneratorAction::RandomInit(int level )
 {
 	CLHEP::Ranlux64Engine *Engine1 = new CLHEP::Ranlux64Engine(aj1bx,level);
@@ -248,9 +380,9 @@ void Bina_PrimaryGeneratorAction::RandomInit(int level )
 GaussDist[0] = GD1;
 GaussDist[1] = GD2;
 
-  
 
- 
+
+
 
 CLHEP::Ranlux64Engine *Engine3 = new CLHEP::Ranlux64Engine(aj1phi,level);  //init generator with seed
 CLHEP::Ranlux64Engine *Engine4 = new CLHEP::Ranlux64Engine(aj1theta,level);
@@ -291,7 +423,7 @@ double Bina_PrimaryGeneratorAction::RandomGauss(double seed, double mean , doubl
     num = (*GaussDist[0]).fire(mean, deviation);
     (*GaussDist[0]).fire(mean, deviation);
     //num = (*FlatDist[0]).fire(mean, deviation);
-    //(*FlatDist[0]).fire(mean, deviation);    
+    //(*FlatDist[0]).fire(mean, deviation);
    return num;
   }
   if (seed == aj1by)
@@ -328,9 +460,9 @@ void Bina_PrimaryGeneratorAction::Pos(void)
 
   bsgx = bfwhmx/(2.*sqrt(2.*log(2.)));
   bsgy = bfwhmy/(2.*sqrt(2.*log(2.)));
-  // tXplace,  tYplace,  tZplace, thigh read from geo.mac in cm and 
-  // recalculated by Geant to mm; bfwhmx, bfwhmy read in default mm. 
-  vertex[0] = tXplace + RandomGauss(aj1bx,0, bsgx); 
+  // tXplace,  tYplace,  tZplace, thigh read from geo.mac in cm and
+  // recalculated by Geant to mm; bfwhmx, bfwhmy read in default mm.
+  vertex[0] = tXplace + RandomGauss(aj1bx,0, bsgx);
   vertex[1] = tYplace + RandomGauss(aj1by,0, bsgy);
   vertex[2] = tZplace - thigh + RandomFlat(ajbz)*2*thigh;
  }
@@ -496,7 +628,7 @@ double* Bina_PrimaryGeneratorAction::ugelast(double* ptot)
       }
       while(u > fphi);
     }
-    else 
+    else
     {
       pphi = CLHEP::pi*(2.*RandomFlat(aj1phi) - 1.);
       fphi = CLHEP::pi+pphi;
@@ -706,7 +838,7 @@ for (i=0;i<180;i++) {
 	      ii = ind[0] + i-1;
               jj = ind[1] + j-1;
               kk = ind[2] + k-1;
-                if (kk>=13) kk=24-kk;//up to 12 and down 
+                if (kk>=13) kk=24-kk;//up to 12 and down
               ll = ind[3] + l-1;
               ya[i][j][k][l] = sig[ii][jj][kk][ll];
 //if (i==2&&j==2&&k==2&&l==2) filell<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<' '<<ii<<' '<<jj<<' '<<kk<<' '<<ll<<' '<<sig[ii][jj][kk][ll]<<' '<<ya[i][j][k][l]<<G4endl;
@@ -740,14 +872,14 @@ for (i=0;i<180;i++) {
 //filell<<csi<<' '<<s0<<G4endl;
 //    if(csi<0.)  filell<<"----- "<<csi<<' '<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
   /*    for(i=0;i<4;i++)
-      
+
         for(j=0;j<4;j++)
-        
+
           for(k=0;k<4;k++)
-          
+
             for(l=0;l<4;l++)
 	    filell<<i<<' '<<j<<' '<<k<<' '<<l<<' '<<ya_r[i+1][j+1][k+1][l+1]<<G4endl;
-             
+
 
 }*/
    //  filell<<t1<<' '<<t2<<' '<<phi12<<' '<<s0<<' '<<csi<<' '<<csmax<<' '<<cstest<<G4endl;
@@ -871,7 +1003,7 @@ do {
       deltaS=E(deltaE1,deltaE2);
   //    filell<<' '<<deltaS<<G4endl;
       paramS=0.000001*deltaE2/deltaS;
-      
+
       e2_0=e2_1+signum*paramS;
     //  filell<<e1_0<<' '<<G4endl;
       icnn=dpb_kin3(switcher,phi12,w_phi13,e2_0,w_e1_0,w_e3_0,bp);
@@ -1156,7 +1288,7 @@ double Bina_PrimaryGeneratorAction::dpb_kin3(const int typ, double phi12,double 
   c = (m2 + m3)*(m2 + m3)*e2i3*e2i3 - d*d;
   delta = b*b - 4.*a*c;
   if (delta < 0.)  return 0;
- 
+
   p2[0] = (-b - sqrt(delta))/(2.*a);
   p2[1] = (-b + sqrt(delta))/(2.*a);
 
@@ -1259,7 +1391,7 @@ double Bina_PrimaryGeneratorAction::rinterp(double ytmp[5][5][5][5],double x1,do
 
 //  const double *ya_const, *y3a_const;
 //  filell.open("fileoutput.txt",ios::out|ios::app);
-//  ya_const = ya;	
+//  ya_const = ya;
 //  y3a_const = y3a;
 //  for (iiii=1;iiii<5;iiii++) {
 //      for (jjjj=1;jjjj<5;jjjj++) {
@@ -1497,7 +1629,7 @@ void Bina_PrimaryGeneratorAction::ugelast_read(void)
   file.open("./data/sig_anpow.dat");
   if (!file)
   {
-    G4cout <<"Cannot open the file : ../data/sig_anpow.dat !!!"<<G4endl;
+    G4cout <<" open the file : ../data/sig_anpow.dat !!!"<<G4endl;
     exit(1);
    }
   for (int i=0;i<70;i++)
@@ -1536,7 +1668,7 @@ void Bina_PrimaryGeneratorAction::break_read(void)
   {
     if (!file[l])
     {
-      G4cout <<"Cannot open the file : file["<<l<<"]"<<G4endl;
+      G4cout <<" open the file : file["<<l<<"]"<<G4endl;
       exit(1);
     }
   }
