@@ -108,6 +108,18 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       return temp;
     };
 
+    inline static double Getb1 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
+    inline static double Geta1 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
     inline static int GetChoice (int num = 10)
     {
       static int temp;
@@ -116,9 +128,14 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     };
 
   private:
+
+	  G4LorentzVector v41;
+	  G4LorentzVector v42;
+	  G4LorentzVector v43;
     G4ParticleGun* particleGun1;		//proton 1
     G4ParticleGun* particleGun2;		//proton 2
     G4ParticleGun* particleGun3;		//neutron
+	G4ParticleGun* event_cleaner_particle_gun;
     Bina_DetectorConstruction* myDetector;
 
     void RandomInit(int =2);			//generators initialization
@@ -136,7 +153,7 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
 
-	void kinematic(double, double, double,double,double);
+	void kinematic(int,double*, double, double,double,double,double);
     double gelkin(double,double*,double*);  // elastic kinematics
     double rinterp(double [5][5][5][5], double, double, double, double);
     double cspol(double,double,double,double,double);
@@ -159,6 +176,7 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     double momentum[9]; 		// table whit track momentum
     double vertex[3];			// table whith vertex position
     double p_mass, d_mass, n_mass;	// pointer to particle mass
+	double a1,b1;
 
     double x1a[4],x2a[4],x3a[4],x4a[4];
     double x1a_r[4],x2a_r[4],x3a_r[4],x4a_r[4];

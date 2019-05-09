@@ -19,18 +19,13 @@
 #include "CLHEP/Random/RandGauss.h"
 #include <fstream>
 #include "G4ios.hh"
-std::ofstream file,file2,file3;
+std::ofstream file,file2,file3,file4;
 Bina_SteppingAction::Bina_SteppingAction(Bina_PhysicsList* myPL)
   : myPhysicsList(myPL)
 {
 
-  file_types=4;//myPL->GetFileOutputs();
-
-  G4cout<<"================"<<G4endl;
-  G4cout<<"================"<<G4endl;
-  G4cout<<"FILE---->"<<file_types<<G4endl;
-  G4cout<<"================"<<G4endl;
-  G4cout<<"================"<<G4endl;
+  file_types=7;//myPL->GetFileOutputs();
+    file4.open("./Bina_outang.dat");
   if (file_types&1)
     file.open("./Bina_out1.dat");
   if (file_types&2)
@@ -59,6 +54,7 @@ Bina_SteppingAction::~Bina_SteppingAction()
   if (file)  file.close();
   if (file2) file2.close();
   if (file3) file3.close();
+  file4.close();
 }
 
 void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
@@ -167,6 +163,10 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           file2 <<G4endl;
           file2 << std::setw(7)<<tab[0];
           file2 << std::setw(3)<<tab[1];
+		  file4 << std::setw(5)<<tab[0];
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Geta1();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Getb1();
+		  file4 <<G4endl;
         }
 
         if (tab[0]==0&&(index1>3||index1<0)) index0=0,index1=0;

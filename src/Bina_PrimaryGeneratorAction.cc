@@ -39,7 +39,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   generator_min=myDC->GetKinematicsMin();
   generator_max=myDC->GetKinematicsMax();
   npd_choice = 2;//myDC->GetNpdChoice();
-  kinematic(1.0,1.0,160.0,1875.613,938.2720813);
+  //kinematic(1.0,1.0,160.0,1875.613,938.2720813);
   G4cout<<"================"<<G4endl;
   G4cout<<"================"<<G4endl;
   G4cout<<"================"<<G4endl;
@@ -49,7 +49,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   icros=myDC->GetNeumann();
   bfwhmx = myDC ->GetBfwhmX();
   bfwhmy = myDC->GetBfwhmY();
-  bt = myDC->GetBtEnergy();
+  bt = 160.0;//myDC->GetBtEnergy();
   pz = myDC->GetPz() ;
   pzz = myDC->GetPzz() ;
   themin = myDC->GetThetaMin()*180/M_PI;
@@ -66,7 +66,9 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   bt1 = 0.;		bt2 = 0.;		bt3 = 0.;
   t1  = 0.;		t2  = 0.;		t3  = 0.;
   fi1 = 0.;             fi2 = 0.;		fi3 = 0.;
-  bt /=1000.;
+  //a1 = 1.0;
+//  b1=1.0;
+//bt /=1000.;
 
   RandomInit();
 
@@ -108,24 +110,6 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
     particle = particleTable->FindParticle("deuteron");
     particleGun2->SetParticleDefinition(particle);
   }
-  else if (npd_choice == 2)
-  {
-    //filell.open("fileoutput.txt",ios::out|ios::app);
-    break_read();			//read cross table and analysing power
-    particleGun1 = new G4ParticleGun(n_particle);
-    particleGun2 = new G4ParticleGun(n_particle);
-    particleGun3 = new G4ParticleGun(n_particle);
-
-    particle = particleTable->FindParticle("proton");
-    particleGun1->SetParticleDefinition(particle);
-
-    G4ParticleDefinition* particle2 = particleTable->FindParticle("proton");
-    particleGun2->SetParticleDefinition(particle2);
-
-    particle = particleTable->FindParticle("neutron");
-    particleGun3->SetParticleDefinition(particle);
-
-  }
   else if (npd_choice == 3)
   {
     //filell.open("fileoutput.txt",ios::out|ios::app);
@@ -143,6 +127,24 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
     particle = particleTable->FindParticle("neutron");
     particleGun3->SetParticleDefinition(particle);
 
+  }
+  else if (npd_choice == 2)
+  {
+    //filell.open("fileoutput.txt",ios::out|ios::app);
+    //break_read();			//read cross table and analysing power
+    particleGun1 = new G4ParticleGun(n_particle);
+    particleGun2 = new G4ParticleGun(n_particle);
+    particleGun3 = new G4ParticleGun(n_particle);
+
+    particle = particleTable->FindParticle("proton");
+    particleGun1->SetParticleDefinition(particle);
+
+    G4ParticleDefinition* particle2 = particleTable->FindParticle("proton");
+    particleGun2->SetParticleDefinition(particle2);
+
+    particle = particleTable->FindParticle("neutron");
+    particleGun3->SetParticleDefinition(particle);
+//event_cleaner_particle_gun = new G4ParticleGun(n_particle);
   }
   else
   {
@@ -162,6 +164,7 @@ Bina_PrimaryGeneratorAction::~Bina_PrimaryGeneratorAction()
 void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   GetChoice(npd_choice);
+  double momentumV[4];
 
   if (npd_choice <  0)
   {
@@ -232,36 +235,6 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun2->GeneratePrimaryVertex(anEvent);
 
   }
-  else if (npd_choice == 2)
-  {
-    //filell.open("fileoutput.txt",ios::out|ios::app);
-    //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
-    ugbreak(momentum);
-    Pos();
-
-    GetStartEnergy(bt1*1000.,bt2*1000.,bt3*1000.);
-    GetStartAngleTheta(t1,t2,t3);
-    GetStartAnglePhi(fi1,fi2,fi3);
-    GetStartPosition(vertex[0],vertex[1],vertex[2]);
-
-    particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-    particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
-    particleGun3->SetParticleMomentumDirection(G4ThreeVector(momentum[6],momentum[7],momentum[8]));
-
-    particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
-    particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
-    particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
-
-    particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-    particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-    particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-
-    particleGun1->GeneratePrimaryVertex(anEvent);
-    particleGun2->GeneratePrimaryVertex(anEvent);
-    particleGun3->GeneratePrimaryVertex(anEvent);
-//    chooser++;
-    //filell.close();
-  }
   else if (npd_choice == 3)
   {
     //filell.open("fileoutput.txt",ios::out|ios::app);
@@ -292,9 +265,69 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 //    chooser++;
     //filell.close();
   }
+  else if (npd_choice == 2)
+  {
+    //filell.open("fileoutput.txt",ios::out|ios::app);
+    //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
+    //ugbreak(momentum);
+    Pos();
+    a1 = G4UniformRand()*360;
+    b1 = G4UniformRand()*360;
+    Geta1(a1);
+    Getb1(b1);
+    //G4cout<<a1<<" "<<b1<<G4endl;
+      	//event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
+    	//event_cleaner_particle_gun->SetParticleEnergy(0.0001*CLHEP::GeV);
+    //	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+//event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
+
+      kinematic(1, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      v41.setE(momentumV[0]);
+      v41.setPx(momentumV[1]);
+      v41.setPy(momentumV[2]);
+      v41.setPz(momentumV[3]);
+    particleGun1->SetParticleMomentumDirection(v41);
+    bt1 = (v41.e()-v41.m());
+    t1 = v41.theta();
+    fi1 = v41.phi();
+    particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
+    particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+    particleGun1->GeneratePrimaryVertex(anEvent);
+
+      kinematic(2, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      v41.setE(momentumV[0]);
+      v41.setPx(momentumV[1]);
+      v41.setPy(momentumV[2]);
+      v41.setPz(momentumV[3]);
+    particleGun2->SetParticleMomentumDirection(v41);
+    bt2 = (v41.e()-v41.m());
+    t2 = v41.theta();
+    fi2 = v41.phi();
+    particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
+    particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+    particleGun2->GeneratePrimaryVertex(anEvent);
+
+      kinematic(3, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      v41.setE(momentumV[0]);
+      v41.setPx(momentumV[1]);
+      v41.setPy(momentumV[2]);
+      v41.setPz(momentumV[3]);
+    particleGun3->SetParticleMomentumDirection(v41);
+    bt3 = (v41.e()-v41.m());
+    t3 = v41.theta();
+    fi3 = v41.phi();
+    particleGun3->SetParticleEnergy(bt1*CLHEP::GeV);
+    particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+    particleGun3->GeneratePrimaryVertex(anEvent);
+
+    GetStartEnergy(bt1*1000.,bt2*1000.,bt3*1000.);
+    GetStartAngleTheta(t1*180./M_PI,t2*180./M_PI,t3*180./M_PI);
+    GetStartAnglePhi(fi1*180./M_PI,fi2*180./M_PI,fi3*180./M_PI);
+    GetStartPosition(vertex[0],vertex[1],vertex[2]);
+  }
 }
 
-void Bina_PrimaryGeneratorAction::kinematic (double alpha, double beta, double beamEnergy=160,  double beamMass=1875.613, double targetMass=938.2720813)
+void Bina_PrimaryGeneratorAction::kinematic (int part, double momentumV[], double alpha, double beta, double beamEnergy=160,  double beamMass=1875.613, double targetMass=938.2720813)
 {
 const double mp=938.2720813;
 const double mn=939.5654133;
@@ -360,9 +393,31 @@ p1->boost(b);//transform to beam reference frame
 p2->boost(b);
 n->boost(b);
 
-G4cout<<p1->theta()*180/3.1415<<' '<<p1->phi()*180/3.1415<<' '<<p1->e()-mp<<' '<<p1->px()<<' '<<p1->py()<<' '<<p1->pz()<<G4endl;
-G4cout<<p2->theta()*180/3.1415<<' '<<p2->phi()*180/3.1415<<' '<<p2->e()-mp<<G4endl;;
-G4cout<<n->theta()*180/3.1415<<' '<<n->phi()*180/3.1415<<' '<<n->e()-mn<<G4endl;;
+//G4cout<<p1->theta()*180/3.1415<<' '<<p1->phi()*180/3.1415<<' '<<p1->e()-mp<<' '<<p1->px()<<' '<<p1->py()<<' '<<p1->pz()<<G4endl;
+//G4cout<<p2->theta()*180/3.1415<<' '<<p2->phi()*180/3.1415<<' '<<p2->e()-mp<<G4endl;
+//G4cout<<n->theta()*180/3.1415<<' '<<n->phi()*180/3.1415<<' '<<n->e()-mn<<G4endl;
+
+if (part == 1)
+{
+  momentumV[0] = p1->e();
+  momentumV[1] = p1->px();
+  momentumV[2] = p1->py();
+  momentumV[3] = p1->pz();
+}
+else if (part == 2)
+{
+  momentumV[0] = p2->e();
+  momentumV[1] = p2->px();
+  momentumV[2] = p2->py();
+  momentumV[3] = p2->pz();
+}
+else
+{
+  momentumV[0] = n->e();
+  momentumV[1] = n->px();
+  momentumV[2] = n->py();
+  momentumV[3] = n->pz();
+}
 
 
 
