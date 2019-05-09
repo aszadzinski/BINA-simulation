@@ -271,7 +271,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
     //ugbreak(momentum);
     Pos();
-    a1 = G4UniformRand()*360;
+    a1 = 90.;
     b1 = G4UniformRand()*360;
     Geta1(a1);
     Getb1(b1);
@@ -290,7 +290,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     bt1 = (v41.e()-v41.m());
     t1 = v41.theta();
     fi1 = v41.phi();
-    particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
+    particleGun1->SetParticleEnergy(bt1*CLHEP::MeV);
     particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun1->GeneratePrimaryVertex(anEvent);
 
@@ -303,7 +303,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     bt2 = (v41.e()-v41.m());
     t2 = v41.theta();
     fi2 = v41.phi();
-    particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
+    particleGun2->SetParticleEnergy(bt2*CLHEP::MeV);
     particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun2->GeneratePrimaryVertex(anEvent);
 
@@ -316,11 +316,11 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     bt3 = (v41.e()-v41.m());
     t3 = v41.theta();
     fi3 = v41.phi();
-    particleGun3->SetParticleEnergy(bt1*CLHEP::GeV);
+    particleGun3->SetParticleEnergy(bt1*CLHEP::MeV);
     particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun3->GeneratePrimaryVertex(anEvent);
 
-    GetStartEnergy(bt1*1000.,bt2*1000.,bt3*1000.);
+    GetStartEnergy(bt1,bt2,bt3);
     GetStartAngleTheta(t1*180./M_PI,t2*180./M_PI,t3*180./M_PI);
     GetStartAnglePhi(fi1*180./M_PI,fi2*180./M_PI,fi3*180./M_PI);
     GetStartPosition(vertex[0],vertex[1],vertex[2]);
