@@ -120,6 +120,44 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       if (num != 10) temp = num;
       return temp;
     };
+
+	inline static double Gett1(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi1(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Gett2(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi2(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Gett3(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi3(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+
     inline static int GetChoice (int num = 10)
     {
       static int temp;

@@ -166,6 +166,12 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 		  file4 << std::setw(5)<<tab[0];
 		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Geta1();
 		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Getb1();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Gett1();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Getfi1();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Gett2();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Getfi2();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Gett3();
+		  file4 << std::setw(12)<<Bina_PrimaryGeneratorAction::Getfi3();
 		  file4 <<G4endl;
         }
 
@@ -175,7 +181,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 //        G4cout<<index1<<' '<<index0<<'\n';
         if (file_types&4)
         {
-          if (Bina_PrimaryGeneratorAction::GetChoice()==2)
+          if (Bina_PrimaryGeneratorAction::GetChoice()==2 || Bina_PrimaryGeneratorAction::GetChoice()==3)
           {
             if (tab[1]==1) {tab[11]=secProtEnergy; tab[12]=secProtDetNr;}
             if (tab[0]!=index0) {
@@ -256,7 +262,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 	else if (tab[1]==3) i=1;
 	else G4cout << "Unknown particle in StepingAction ... tab[1] = "<<tab[1]<<G4endl;
       }
-      else if (npd_choice == 2)
+      else if (npd_choice == 2 || npd_choice == 3)
       {
         if      (fabs(energy[0] - startEnergy)<0.001) i = 0;
 	else if (fabs(energy[1] - startEnergy)<0.001) i = 1;
