@@ -29,8 +29,6 @@ if __name__ == "__main__":
     b1 = np.array(load1(argv[1], 15)).transpose()
     b2 = np.array(load1(argv[2], 18)).transpose()
     b3 = np.array(load1(argv[3], 9)).transpose()
-    if len(argv)>4:
-        b4 = np.array(load1(argv[4], 9)).transpose()
     #print(b1[1])
 
     #plt.hist2d(b1[5],b1[6],bins=200)
@@ -51,7 +49,7 @@ if __name__ == "__main__":
 
     for i in range(b3.shape[0]):
         if b3[i][12] == 1:
-            x.append(b3[i][15])
+            x.append(b3[i][15]+180)
             y.append(b3[i][16])
     det = 999
     pr1, pr2 = 0,0
@@ -85,20 +83,17 @@ if __name__ == "__main__":
 
 
     #MWPC
-    bd1,bd2=[],[]
     at,ap,mx,my,mxb,myb=[],[],[],[],[],[]
     for i in range(len(dd1)):
         if dmx2[i] == 0 and dmx1[i]==0 and dd1[i] < 150 and dd2[i]<150:
-            mxb.append(dt2[i])
+            mxb.append(dt2[i]+180)
             myb.append(dp2[i])
     for i in range(len(dd1)):
         if dmx2[i] !=0 and dd1[i] < 150 and dd1[i] != 0:
             mx.append(dmx2[i])
             my.append(dmy2[i])
-            at.append(dt2[i])
+            at.append(dt2[i]+180)
             ap.append(dp2[i])
-            bd1.append(dd1[i])
-            bd2.append(dd2[i])
         elif dmx1[i] !=0 and dd2[i] < 150 and dd2[i] != 0:
             mx.append(dmx1[i])
             my.append(dmy1[i])

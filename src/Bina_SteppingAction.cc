@@ -206,8 +206,8 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
     //  G4cout<<index0<<' '<<index1<<' '<<tab[0]<<' '<<tab[1]<<' '<<Bina_PrimaryGeneratorAction::GetChoice()<<'\n';
         }
       file3<<std::setw(17)<<tab[0]<<std::setw(4)<<tab[1]<<std::setw(4)
-      <<tab[2]<<std::setw(4)<<tab[4]<<std::setw(15)<<tab[11]
-      <<std::setw(15)<<tab3[3]<<std::setw(15)<<tab3[4]
+      <<tab[2]<<std::setw(4)<<tab[4]<<std::setw(15)<<Bina_PrimaryGeneratorAction::Getb1()
+      <<std::setw(15)<<Bina_PrimaryGeneratorAction::Geta1()<<std::setw(15)<<tab3[4]
       <<std::setw(15)<<tab3[5]<<std::setw(15)<<tab[12];//
       index1++;
       if (Bina_PrimaryGeneratorAction::GetChoice()!=2||index1==3) {

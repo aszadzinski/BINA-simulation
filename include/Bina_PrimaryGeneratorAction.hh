@@ -11,6 +11,8 @@
 #include "CLHEP/Random/Ranlux64Engine.h"
 #include "g4root.hh"
 #include "G4LorentzVector.hh"
+#include <fstream>
+#include <iostream>
 
 
 class Bina_DetectorConstruction;
@@ -188,10 +190,12 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     void ugelast_read(void);
     void break_read(void);
+    void read_part_momentum(double*);
+    void open_pluto_file();
+    int gen;
+std::ifstream file_Pluto_generator;
 
-
-
-	void kinematic(int,double*, double, double,double,double,double);
+	void kinematic(double,int,double*, double, double,double,double,double);
     double gelkin(double,double*,double*);  // elastic kinematics
     double rinterp(double [5][5][5][5], double, double, double, double);
     double cspol(double,double,double,double,double);
@@ -214,7 +218,7 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     double momentum[9]; 		// table whit track momentum
     double vertex[3];			// table whith vertex position
     double p_mass, d_mass, n_mass;	// pointer to particle mass
-	double a1,b1;
+	double a1,b1,b2;
 
     double x1a[4],x2a[4],x3a[4],x4a[4];
     double x1a_r[4],x2a_r[4],x3a_r[4],x4a_r[4];
