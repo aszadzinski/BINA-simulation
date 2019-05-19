@@ -19,6 +19,7 @@ class Bina_SteppingAction : public G4UserSteppingAction
     int energy_broadening;
     int file_types;
   private:
+  int counter=0;
   double *energy, *theta, *phi ,*position;
   Bina_PhysicsList* myPhysicsList;
 };

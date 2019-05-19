@@ -36,7 +36,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   : myDetector(myDC)
 {
   #include "Bina_Detector.cfg"
-	gen = 1;
+	gen = 2;
   generator_min=myDC->GetKinematicsMin();
   generator_max=myDC->GetKinematicsMax();
   npd_choice = 2;//myDC->GetNpdChoice();
@@ -138,7 +138,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
     particleGun1 = new G4ParticleGun(n_particle);
     particleGun2 = new G4ParticleGun(n_particle);
     particleGun3 = new G4ParticleGun(n_particle);
-
+ event_cleaner_particle_gun = new G4ParticleGun(n_particle);
     particle = particleTable->FindParticle("proton");
     particleGun1->SetParticleDefinition(particle);
 
@@ -147,6 +147,8 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
 
     particle = particleTable->FindParticle("neutron");
     particleGun3->SetParticleDefinition(particle);
+              particle = particleTable->FindParticle("e-");
+event_cleaner_particle_gun->SetParticleDefinition(particle);
 //event_cleaner_particle_gun = new G4ParticleGun(n_particle);
   }
   else
@@ -352,10 +354,10 @@ Pos();
 //generujemy dodatkowa czastke 
 //zeby zapewnic zapic wszystkich czastek w tym samym evencie
 // bo czastki zapisywane sa dopiero po rozpoczeciu symulacji kolejnej!!
-  //	event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
-    //	event_cleaner_particle_gun->SetParticleEnergy(0.0001*CLHEP::GeV);
-    //	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-    //	event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
+event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
+	event_cleaner_particle_gun->SetParticleEnergy(0.0001*CLHEP::GeV);
+ 	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+	event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
 // Black Magic end
   	//G4cout<<"plutoGen-------->"<<G4endl;
   	//reading deuteron
@@ -367,7 +369,7 @@ Pos();
   	particleGun1->SetParticleMomentumDirection(v41);
   	bt1=(v41.e()-v41.m());
   	t1=v41.theta();
-  	fi1=v41.phi();
+  	fi1=v41.phi()+M_PI;
   	particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
   	particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
   	particleGun1->GeneratePrimaryVertex(anEvent);
@@ -379,7 +381,7 @@ Pos();
   	v41.setPz(pluto_momentum[3]);
   	bt2=(v41.e()-v41.m());
   	t2=v41.theta();
-  	fi2=v41.phi();
+  	fi2=v41.phi()+M_PI;
   	particleGun2->SetParticleMomentumDirection(v41);
   	particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
   	//particleGun2->SetParticleEnergy((v4.e()-v4.m())*CLHEP::GeV);
@@ -396,7 +398,7 @@ Pos();
   	v41.setPz(pluto_momentum[3]);
   	bt3=(v41.e()-v41.m());
   	t3=v41.theta();
-  	fi3=v41.phi();
+  	fi3=v41.phi()+M_PI;
   	particleGun3->SetParticleMomentumDirection(v41);
   	particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
   	particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
@@ -559,7 +561,7 @@ CLHEP::RandFlat *GD11 = new CLHEP::RandFlat(*Engine11);
 void Bina_PrimaryGeneratorAction::open_pluto_file(){
 	char file_path[500];
 	//if(npd_choice==0) sprintf(file_path,"data/output_elast_dp.txt");
-	if(npd_choice==2) sprintf(file_path,"data/output_break_dp.txt");
+	if(npd_choice==2) sprintf(file_path,"data/output_break_pd.txt");
 	//if(npd_choice==3) sprintf(file_path,"data/output_break_dd.txt");	
 	file_Pluto_generator.open(file_path,std::ios::in);
 	if( !file_Pluto_generator.is_open()){
