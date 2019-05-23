@@ -110,6 +110,12 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       return temp;
     };
 
+    inline static double Getb2 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
     inline static double Getb1 (double num = 10.0)
     {
       static double temp;

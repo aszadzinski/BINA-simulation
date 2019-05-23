@@ -1,3 +1,13 @@
 build*/
 *.swp
 *.cache
+
+SSA/
+SSA108/
+SSAdp/
+onSSA/
+onSSA108/
+onSSAdp/
+smcebi/
+tm/
+tmnew/

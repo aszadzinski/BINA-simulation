@@ -36,7 +36,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   : myDetector(myDC)
 {
   #include "Bina_Detector.cfg"
-	gen = 2;
+	gen = 1;
   generator_min=myDC->GetKinematicsMin();
   generator_max=myDC->GetKinematicsMax();
   npd_choice = 2;//myDC->GetNpdChoice();
@@ -50,7 +50,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   icros=myDC->GetNeumann();
   bfwhmx = myDC ->GetBfwhmX();
   bfwhmy = myDC->GetBfwhmY();
-  bt = 160.0;//myDC->GetBtEnergy();
+  bt = 108.0;//myDC->GetBtEnergy();
   pz = myDC->GetPz() ;
   pzz = myDC->GetPzz() ;
   themin = 0.0*180/M_PI;
@@ -283,19 +283,31 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
     //ugbreak(momentum);
     Pos();
-    a1 = 89.0+2.0*G4UniformRand();
+/// Black Magic begin
+//generujemy dodatkowa czastke 
+//zeby zapewnic zapic wszystkich czastek w tym samym evencie
+// bo czastki zapisywane sa dopiero po rozpoczeciu symulacji kolejnej!!
+event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
+	event_cleaner_particle_gun->SetParticleEnergy(0.0001*CLHEP::GeV);
+ 	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
+	event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
+// Black Magic end
+  	//G4cout<<"plutoGen-------->"<<G4endl;
+  	//reading deuteron
+    a1 = 180.*G4UniformRand();//G4RandGauss::shoot(0.,5.);
     b1 = G4UniformRand()*360;
-    b2 = 0;//360*G4UniformRand()*2*M_PI;
+    b2 = G4UniformRand()*2*M_PI;
     //G4cout<<"beta->"<<b1<<G4endl;
     Geta1(a1);
     Getb1(b1);
+    Getb2(b2);
     //G4cout<<a1<<" "<<b1<<G4endl;
       	//event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
     	//event_cleaner_particle_gun->SetParticleEnergy(0.0001*CLHEP::GeV);
     //	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
 //event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,1, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      kinematic(b2,1, momentumV,a1,b1,bt, 938.2720813,1875.613);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);
@@ -310,7 +322,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun1->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,2, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      kinematic(b2,2, momentumV,a1,b1,bt, 938.2720813,1875.613);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);
@@ -325,7 +337,7 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun2->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,3, momentumV,a1,b1,bt, 1875.613,938.2720813);
+      kinematic(b2,3, momentumV,a1,b1,bt, 938.2720813,1875.613);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);
