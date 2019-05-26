@@ -294,7 +294,7 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
 // Black Magic end
   	//G4cout<<"plutoGen-------->"<<G4endl;
   	//reading deuteron
-    a1 = 180.*G4UniformRand();//G4RandGauss::shoot(0.,5.);
+    a1 = 180*G4UniformRand();//G4RandGauss::shoot(90.,5.);
     b1 = G4UniformRand()*360;
     b2 = G4UniformRand()*2*M_PI;
     //G4cout<<"beta->"<<b1<<G4endl;
