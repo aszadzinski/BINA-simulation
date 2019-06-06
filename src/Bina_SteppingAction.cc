@@ -152,7 +152,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
         if(tab[1]>0){  
 		 file5<<tab[0]<<" "<<tab[1]<<" "<<tab[5]<<" "<<tab[6]<<" "<<tab3[5]<<" "<<tab3[4]<<" "<<tab3[3]<<" "<<tab[11]<<" "<<tab[7]<<" "<<tab[12]<<" "<<tab[8]<<" "<<Bina_PrimaryGeneratorAction::Geta1()<<" "<<Bina_PrimaryGeneratorAction::Getb1()<<" "<<Bina_PrimaryGeneratorAction::Getb2()<<" "<<tab[2]<<" "<<tab[4]<<" "<<tab[3]<<"   ";
 		 counter++;
-		 if (counter==3)
+		 if (true)//(counter==3)
 		 {
 			 file5<<G4endl;
 			 counter = 0;
