@@ -294,8 +294,8 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
 // Black Magic end
   	//G4cout<<"plutoGen-------->"<<G4endl;
   	//reading deuteron
-    a1 = 180*G4UniformRand();//G4RandGauss::shoot(90.,5.);
-    b1 = G4UniformRand()*360;
+    a1 = 85+ 10*G4UniformRand();//G4RandGauss::shoot(90.,5.);
+    b1 = G4UniformRand()*180;
     b2 = G4UniformRand()*2*M_PI;
     //G4cout<<"beta->"<<b1<<G4endl;
     Geta1(a1);
@@ -307,7 +307,7 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
     //	event_cleaner_particle_gun->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
 //event_cleaner_particle_gun->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,1, momentumV,a1,b1,bt, 938.2720813,1875.613);
+      kinematic(b2,1, momentumV,a1,b1,bt,1875.613,938.2720813);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);
@@ -322,7 +322,7 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
     particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun1->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,2, momentumV,a1,b1,bt, 938.2720813,1875.613);
+      kinematic(b2,2, momentumV,a1,b1,bt,1875.613, 938.2720813);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);
@@ -337,7 +337,7 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
     particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
     particleGun2->GeneratePrimaryVertex(anEvent);
 
-      kinematic(b2,3, momentumV,a1,b1,bt, 938.2720813,1875.613);
+      kinematic(b2,3, momentumV,a1,b1,bt, 1875.613,938.2720813);
       v41.setE(momentumV[0]);
       v41.setPx(momentumV[1]);
       v41.setPy(momentumV[2]);

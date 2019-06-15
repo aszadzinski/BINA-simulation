@@ -12,3 +12,5 @@ smcebi/
 tm/
 tmnew/
 7c*
+*__pyc*
+*venv*
