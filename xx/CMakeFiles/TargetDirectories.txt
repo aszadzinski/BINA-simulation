@@ -1,8 +1,0 @@
-/root/BINA/xx/CMakeFiles/install/strip.dir
-/root/BINA/xx/CMakeFiles/install/local.dir
-/root/BINA/xx/CMakeFiles/rebuild_cache.dir
-/root/BINA/xx/CMakeFiles/bina_run.dir
-/root/BINA/xx/CMakeFiles/list_install_components.dir
-/root/BINA/xx/CMakeFiles/BINA.dir
-/root/BINA/xx/CMakeFiles/edit_cache.dir
-/root/BINA/xx/CMakeFiles/install.dir
