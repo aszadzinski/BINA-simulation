@@ -23,10 +23,10 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
 
   geomDir = new G4UIdirectory("/geom/");
   geomDir->SetGuidance("Detector control.");
-  
+
   paramDir = new G4UIdirectory("/param/");
   paramDir->SetGuidance("Detector control.");
-  
+
   generationDir=new G4UIdirectory("/generator/");
   generationDir->SetGuidance("Breakup generator settings");
 
@@ -55,6 +55,22 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
 
   NpdChoiceCmd = new G4UIcmdWithAnInteger("/param/npd_choice",this);
   NpdChoiceCmd->SetGuidance("Choice of process: 1 - elast. dp, 2 - break-up, 0 - elast uniform., -1 - p.");
+
+  genCmd = new G4UIcmdWithAnInteger("/param/gen",this);
+  genCmd->SetGuidance("Star: 1 - from kinematic, 2 - plutoGen");
+
+  alphaCmd = new G4UIcmdWithADouble("/param/alpha",this);
+  alphaCmd->SetGuidance("alpha ang. [deg]");
+  betaCmd = new G4UIcmdWithADouble("/param/beta",this);
+  betaCmd->SetGuidance("beta ang. [deg]");
+  gammaCmd = new G4UIcmdWithADouble("/param/alpha",this);
+  gammaCmd->SetGuidance("gamma ang. [deg]");
+  alpha0Cmd = new G4UIcmdWithADouble("/param/alpha0",this);
+  alpha0Cmd->SetGuidance("alpha range: (alpha;alpha+alpha0)");
+  beta0Cmd = new G4UIcmdWithADouble("/param/beta0",this);
+  beta0Cmd->SetGuidance("beta range: (beta;beta+beta0)");
+  gamma0Cmd = new G4UIcmdWithADouble("/param/gamma0",this);
+  gamma0Cmd->SetGuidance("gamma range: (gamma;gamma+gamma0)");
 
   IfNeumannCmd = new G4UIcmdWithAnInteger("/param/neumann",this);
   IfNeumannCmd->SetGuidance("Only for npd_choice==2, Sets the method of generation \n 0-uniform, 1-using cross section tables");
@@ -98,7 +114,7 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
   PhiMaxCmd = new G4UIcmdWithADoubleAndUnit("/param/phimax",this);
   PhiMaxCmd->SetGuidance("Phi generation max.");
   PhiMaxCmd->SetDefaultUnit("deg");
-  
+
 //  ParamUpdate = new G4UIcmdWithoutParameter("/param/update",this);
 
 //////////////////////////////
@@ -223,11 +239,11 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
   DeltaeDimXCmd = new G4UIcmdWithADoubleAndUnit("/geom/deltae/dim_x",this);
   DeltaeDimXCmd ->SetGuidance("Set half of Delta X dimension");
   DeltaeDimXCmd ->SetDefaultUnit("cm");
-  
+
   DeltaeDimYCmd  = new G4UIcmdWithADoubleAndUnit("/geom/deltae/dim_y",this);
   DeltaeDimYCmd ->SetGuidance("Set half of Delta Y dimension");
   DeltaeDimYCmd ->SetDefaultUnit("cm");
-  
+
   DeltaeDimZCmd  = new G4UIcmdWithADoubleAndUnit("/geom/deltae/dim_z",this);
   DeltaeDimZCmd ->SetGuidance("Set half of Delta Z dimension");
   DeltaeDimZCmd ->SetDefaultUnit("cm");
@@ -239,11 +255,11 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
   DeltaeHoleOutCmd  = new G4UIcmdWithADoubleAndUnit("/geom/deltae/hole_rOut",this);
   DeltaeHoleOutCmd ->SetGuidance("Set half of Delta Y dimension");
   DeltaeHoleOutCmd ->SetDefaultUnit("cm");
-  
+
   DeltaeSeparCmd  = new G4UIcmdWithADoubleAndUnit("/geom/deltae/separ",this);
   DeltaeSeparCmd ->SetGuidance("Set half of Delta Z dimension");
   DeltaeSeparCmd ->SetDefaultUnit("cm");
-  
+
   DeltaeN0Cmd = new G4UIcmdWithAnInteger("/geom/deltae/n_min",this);
   DeltaeN0Cmd->SetGuidance("If  Deltae is =1 , if not =0");
   DeltaeN0Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -251,7 +267,7 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
   DeltaeNMaxCmd = new G4UIcmdWithAnInteger("/geom/deltae/n_max",this);
   DeltaeNMaxCmd->SetGuidance("If  Deltae visible =1 , if not =0");
   DeltaeNMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-   
+
 // Delta E placement
   DeltaeXplaceCmd = new G4UIcmdWithADoubleAndUnit("/geom/deltae/place_x",this);
   DeltaeXplaceCmd->SetGuidance("Set placement of the Delta E in X axis");
@@ -391,7 +407,7 @@ Bina_DetectorMessenger::Bina_DetectorMessenger(Bina_DetectorConstruction* Det)
   WallNMaxCmd = new G4UIcmdWithAnInteger("/geom/wall/n_max",this);
   WallNMaxCmd->SetGuidance("If  Wall is =1 , if not =0");
   WallIsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
+
 // Wall placement
   WallDimSCmd = new G4UIcmdWithADoubleAndUnit("/geom/wall/dim_S",this);
   WallDimSCmd->SetGuidance("Set placement of the center E detector in X axis");
@@ -413,7 +429,13 @@ Bina_DetectorMessenger::~Bina_DetectorMessenger()
 //////////////////////////////
 // Generation Parameters
 //////////////////////////////
-
+  delete genCmd;
+  delete alphaCmd;
+  delete betaCmd;
+  delete gammaCmd;
+  delete alpha0Cmd;
+  delete beta0Cmd;
+  delete gamma0Cmd;
   delete NpdChoiceCmd;
   delete IfNeumannCmd;
   delete BfwhmX_Cmd;
@@ -528,6 +550,22 @@ void Bina_DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue
 //////////////////////////////
    if(command==NpdChoiceCmd)
     myDetector->SetNpdChoice(NpdChoiceCmd->GetNewIntValue(newValues));
+
+  else if(command==genCmd)
+    myDetector->Setgen(genCmd->GetNewIntValue(newValues));
+  else if(command==alphaCmd)
+    myDetector->Setalpha(alphaCmd->GetNewDoubleValue(newValues));
+  else if(command==betaCmd)
+    myDetector->Setbeta(betaCmd->GetNewDoubleValue(newValues));
+  else if(command==gammaCmd)
+    myDetector->Setgamma(gammaCmd->GetNewDoubleValue(newValues));
+  else if(command==alpha0Cmd)
+    myDetector->Setalpha0(alpha0Cmd->GetNewDoubleValue(newValues));
+  else if(command==beta0Cmd)
+    myDetector->Setbeta0(beta0Cmd->GetNewDoubleValue(newValues));
+  else if(command==gamma0Cmd)
+    myDetector->Setgamma0(gamma0Cmd->GetNewDoubleValue(newValues));
+
   else if(command==IfNeumannCmd)
     myDetector->SetNeumann(IfNeumannCmd->GetNewIntValue(newValues));
   else if(command==BfwhmX_Cmd)
@@ -625,23 +663,23 @@ void Bina_DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue
     myDetector->SetDeltaeIs(DeltaeIsCmd->GetNewIntValue(newValues));
   else if(command==DeltaeVisibleCmd)
     myDetector->SetDeltaeVisible(DeltaeVisibleCmd->GetNewIntValue(newValues));
-      
+
   else if(command==DeltaeDimXCmd)
-    myDetector->SetDeltaeDimX(DeltaeDimXCmd->GetNewDoubleValue(newValues));   
+    myDetector->SetDeltaeDimX(DeltaeDimXCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeDimYCmd)
-    myDetector->SetDeltaeDimY(DeltaeDimYCmd->GetNewDoubleValue(newValues)); 
+    myDetector->SetDeltaeDimY(DeltaeDimYCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeDimZCmd)
-    myDetector->SetDeltaeDimZ(DeltaeDimZCmd->GetNewDoubleValue(newValues));   
+    myDetector->SetDeltaeDimZ(DeltaeDimZCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeDimfCmd)
-    myDetector->SetDeltaeDimf(DeltaeDimfCmd->GetNewDoubleValue(newValues));   
+    myDetector->SetDeltaeDimf(DeltaeDimfCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeHoleOutCmd)
-    myDetector->SetDeltaeHoleOut(DeltaeHoleOutCmd->GetNewDoubleValue(newValues)); 
+    myDetector->SetDeltaeHoleOut(DeltaeHoleOutCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeSeparCmd)
-    myDetector->SetDeltaeSepar(DeltaeSeparCmd->GetNewDoubleValue(newValues)); 
+    myDetector->SetDeltaeSepar(DeltaeSeparCmd->GetNewDoubleValue(newValues));
   else if(command==DeltaeN0Cmd)
     myDetector->SetDeltaeN0(DeltaeN0Cmd->GetNewIntValue(newValues));
   else if(command==DeltaeNMaxCmd)
-    myDetector->SetDeltaeNMax(DeltaeNMaxCmd->GetNewIntValue(newValues));          
+    myDetector->SetDeltaeNMax(DeltaeNMaxCmd->GetNewIntValue(newValues));
 // Delta E placement
   else if(command==DeltaeXplaceCmd)
     myDetector->SetDeltaeXplace(DeltaeXplaceCmd->GetNewDoubleValue(newValues));
@@ -736,4 +774,3 @@ void Bina_DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue
     myDetector->SetKinematicsMax(GenMaxCmd->GetNewDoubleValue(newValues));
   else std::cout<<"Not found\n";
 }
-

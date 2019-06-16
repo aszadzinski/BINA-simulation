@@ -36,17 +36,25 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
   : myDetector(myDC)
 {
   #include "Bina_Detector.cfg"
-	gen = 1;
+	gen = myDC->Getgen();
+	alpha = myDC->Getalpha();
+	beta = myDC->Getbeta();
+	gamma = myDC->Getgamma();
+	alpha0 = myDC->Getalpha0();
+	beta0 = myDC->Getbeta0();
+	gamma0 = myDC->Getgamma0();
   generator_min=myDC->GetKinematicsMin();
   generator_max=myDC->GetKinematicsMax();
-  npd_choice = 2;//myDC->GetNpdChoice();
+  npd_choice = myDC->GetNpdChoice();
   //kinematic(1.0,1.0,160.0,1875.613,938.2720813);
   G4cout<<"================"<<G4endl;
   G4cout<<"================"<<G4endl;
-  G4cout<<"================"<<G4endl;
+
   G4cout<<"NPD--->"<<npd_choice<<G4endl;
+  G4cout<<"gen--->"<<gen<<G4endl;
+
   G4cout<<"================"<<G4endl;
-  G4cout<<"================"<<G4endl;
+    G4cout<<"================"<<G4endl;
   icros=myDC->GetNeumann();
   bfwhmx = myDC ->GetBfwhmX();
   bfwhmy = myDC->GetBfwhmY();
@@ -278,13 +286,13 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   	//G4cout<<"plutoGen-------->"<<gen<<G4endl;
 	if (gen==1)
-	{	
+	{
     //filell.open("fileoutput.txt",ios::out|ios::app);
     //G4cout <<"Npd_choice : "<<npd_choice<<G4endl;
     //ugbreak(momentum);
     Pos();
 /// Black Magic begin
-//generujemy dodatkowa czastke 
+//generujemy dodatkowa czastke
 //zeby zapewnic zapic wszystkich czastek w tym samym evencie
 // bo czastki zapisywane sa dopiero po rozpoczeciu symulacji kolejnej!!
 event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
@@ -294,8 +302,8 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
 // Black Magic end
   	//G4cout<<"plutoGen-------->"<<G4endl;
   	//reading deuteron
-    a1 = 85+ 10*G4UniformRand();//G4RandGauss::shoot(90.,5.);
-    b1 = G4UniformRand()*180;
+    a1 = alpha + alpha0*G4UniformRand();//G4RandGauss::shoot(90.,5.);
+    b1 = beta + beta0 *G4UniformRand();
     b2 = G4UniformRand()*2*M_PI;
     //G4cout<<"beta->"<<b1<<G4endl;
     Geta1(a1);
@@ -361,9 +369,9 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
 	else if (gen==2)
 	{
 Pos();
-	
+
 /// Black Magic begin
-//generujemy dodatkowa czastke 
+//generujemy dodatkowa czastke
 //zeby zapewnic zapic wszystkich czastek w tym samym evencie
 // bo czastki zapisywane sa dopiero po rozpoczeciu symulacji kolejnej!!
 event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-1.0));
@@ -400,10 +408,10 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
   	particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
   	particleGun2->GeneratePrimaryVertex(anEvent);
   	//reading neutron
-  	
+
   	//bez neutronu
   	read_part_momentum(pluto_momentum);
-  	
+
   	v41.setE(pluto_momentum[0]);
   	v41.setPx(pluto_momentum[1]);
   	v41.setPy(pluto_momentum[2]);
@@ -415,11 +423,11 @@ event_cleaner_particle_gun->SetParticleMomentumDirection(G4ThreeVector(0.0,0.0,-
   	particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
   	particleGun3->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
   	particleGun3->GeneratePrimaryVertex(anEvent);
-  
+
       GetStartEnergy(bt1*1000.,bt2*1000.,bt3*1000.);
       GetStartAngleTheta(t1*180./M_PI,t2*180./M_PI,t3*180./M_PI);
       GetStartAnglePhi(fi1*180./M_PI,fi2*180./M_PI,fi3*180./M_PI);
-      GetStartPosition(vertex[0],vertex[1],vertex[2]);	
+      GetStartPosition(vertex[0],vertex[1],vertex[2]);
 	}
   }
 }
@@ -573,8 +581,8 @@ CLHEP::RandFlat *GD11 = new CLHEP::RandFlat(*Engine11);
 void Bina_PrimaryGeneratorAction::open_pluto_file(){
 	char file_path[500];
 	//if(npd_choice==0) sprintf(file_path,"data/output_elast_dp.txt");
-	if(npd_choice==2) sprintf(file_path,"data/output_break_pd.txt");
-	//if(npd_choice==3) sprintf(file_path,"data/output_break_dd.txt");	
+	if(npd_choice==2) sprintf(file_path,"output_pluto.txt");
+	//if(npd_choice==3) sprintf(file_path,"data/output_break_dd.txt");
 	file_Pluto_generator.open(file_path,std::ios::in);
 	if( !file_Pluto_generator.is_open()){
 		G4cout<<"\n\n MyLog: Plik nie zostal otwarty\n";
@@ -1823,7 +1831,7 @@ if( !file_Pluto_generator.is_open()){
 	exit(666);
 	}
 if(!file_Pluto_generator.eof()){
-	for(int i=0;i<4;i++) {file_Pluto_generator>>pluto_momentum[i];}	
+	for(int i=0;i<4;i++) {file_Pluto_generator>>pluto_momentum[i];}
 	}
 	else {
 	G4cout<<"Plik skończon\n";

@@ -20,13 +20,13 @@
 #include <fstream>
 #include "G4ios.hh"
 std::ofstream file,file2,file3,file4,file5;
-Bina_SteppingAction::Bina_SteppingAction(Bina_PhysicsList* myPL)
-  : myPhysicsList(myPL)
+Bina_SteppingAction::Bina_SteppingAction(Bina_PhysicsList* myPL, Bina_EventAction* myEvt, bool rt)
+  : myPhysicsList(myPL), myEvent(myEvt)
 {
-
+	root = rt;
   file_types=0;//myPL->GetFileOutputs();
     //file4.open("./Bina_outang.dat");
-        file5.open("./Bina_out4.dat");/*
+        file5.open("./Bina_output.dat");/*
   if (file_types&1)
     file.open("./Bina_out1.dat");
   if (file_types&2)
@@ -121,7 +121,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
       bound = 0;
 //      ebound = 0;
 
-      if (tab[2] || tab[3] || tab[4]) //tutaj chyba sprawdzana jest akceptancja? 
+      if (tab[2] || tab[3] || tab[4]) //tutaj chyba sprawdzana jest akceptancja?
       {
       // rozmycie energii deponowanej w Saladzie (uwzglednienie zdolnosci rozdzielczej)
 
@@ -132,7 +132,7 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
           sigma_res = 0.14*sqrt(tab[11])+0.07;
           edet = CLHEP::RandGauss::shoot(tab[11],sigma_res);
           //edet = RandomGauss(aj1r1,tab[11],sigma_res);
-      
+
           if (edet<0) edet = 0;
           tab[11] = edet;
         }
@@ -149,8 +149,12 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
     }
     //TEST
 
-        if(tab[1]>0){  
+        if(tab[1]>0){
 		 file5<<tab[0]<<" "<<tab[1]<<" "<<tab[5]<<" "<<tab[6]<<" "<<tab3[5]<<" "<<tab3[4]<<" "<<tab3[3]<<" "<<tab[11]<<" "<<tab[7]<<" "<<tab[12]<<" "<<tab[8]<<" "<<Bina_PrimaryGeneratorAction::Geta1()<<" "<<Bina_PrimaryGeneratorAction::Getb1()<<" "<<Bina_PrimaryGeneratorAction::Getb2()<<" "<<tab[2]<<" "<<tab[4]<<" "<<tab[3]<<"   ";
+		 if (root)
+		 {
+			 myEvent->AddHits(tab[1],tab[5],tab[6],tab3[5],tab3[4],tab3[3],tab[11],tab[7],tab[12],tab[8],position[0],position[1],position[2],tab[2],tab[4],tab[3],tof_e,tof_de);
+		 }
 		 counter++;
 		 if (true)//(counter==3)
 		 {
@@ -161,8 +165,10 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
     //TEST
   SNumberPrev = 0;
   tab[2]=tab[3]=tab[4]=0;
+  tof_e=0;
+tof_de=0;
   }
-  
+
   else SNumberPrev = SNumber;
 
   if (ParticleType == G4Neutron::NeutronDefinition()) {tab[1] = 1.;}//test[1] = 1.;}		//neutron
@@ -272,7 +278,8 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 	      if(thePrePVname(0,7)!="DeltaE_")tab[8 + 2*ilosc] = thePostCopyNo;
 	      tab2[2 + 2*ilosc] = theTrack->GetKineticEnergy();
 	      bound = 0;
-	      
+		  if(ilosc==0) tof_de=thePostPoint->GetLocalTime();
+
 	    }
 	}
       //      if(thePostPoint->GetStepStatus() == fGeomBoundary)
@@ -317,7 +324,8 @@ void Bina_SteppingAction::UserSteppingAction(const G4Step * theStep)
 		if(thePrePVname(0,5)!="EDet_")tab[12 + 2*ilosc] = thePostCopyNo;
 		tab2[6 + 2*ilosc] = theTrack->GetKineticEnergy();
 		bound = 0;
-		
+		if(ilosc==0) tof_e=thePostPoint->GetLocalTime();
+
 	      }
 	  }
 	if(theTrack->GetParentID()==0) //only primaries!

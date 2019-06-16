@@ -25,6 +25,8 @@ target_link_libraries(bina_run ${Geant4_LIBRARIES})
 set(BINA_SCRIPTS
   run.mac
   geo.mac
+  pluto_convert.py
+  pluto.mac
   )
 
 foreach(_script ${BINA_SCRIPTS})

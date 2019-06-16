@@ -5,8 +5,16 @@
 ##       Władysław Nowak         ##
 ##                               ##
 ###################################
-#modifications awilczek
-/param/npd_choice      -3
+#modifications awilczek +aszadzinski
+/param/npd_choice      2
+/param/gen		1
+/param/alpha		85.
+/param/alpha0		10.
+/param/beta		0.
+/param/beta0		180.
+#/param/gamma		1.
+#/param/gamma0		1.
+
 /param/bfwhmx          1.        	# in mm!
 /param/bfwhmy          1.		# in mm!
 /param/bt              130. MeV      #tylko MeV !!

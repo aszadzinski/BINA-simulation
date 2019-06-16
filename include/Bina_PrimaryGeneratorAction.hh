@@ -225,7 +225,7 @@ std::ifstream file_Pluto_generator;
     double vertex[3];			// table whith vertex position
     double p_mass, d_mass, n_mass;	// pointer to particle mass
 	double a1,b1,b2;
-
+	double alpha, beta, gamma,alpha0,beta0,gamma0;
     double x1a[4],x2a[4],x3a[4],x4a[4];
     double x1a_r[4],x2a_r[4],x3a_r[4],x4a_r[4];
     double ya_r[5][5][5][5], yax_r[5][5][5][5];
