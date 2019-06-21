@@ -1,0 +1,17 @@
+build*/
+*.swp
+*.cache
+
+SSA/
+SSA108/
+SSAdp/
+onSSA/
+onSSA108/
+onSSAdp/
+smcebi/
+tm/
+tmnew/
+7c*
+*__pyc*
+*venv*
+new/

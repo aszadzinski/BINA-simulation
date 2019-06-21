@@ -39,6 +39,13 @@ class Bina_DetectorConstruction : public G4VUserDetectorConstruction
 //////////////////////////////
 
 public:
+  void Setgen(G4int gg)                {gen=gg;};
+  void Setalpha(G4double a1)              {alfa=a1;};
+  void Setbeta(G4double b1)              {beta=b1;};
+  void Setgamma(G4double g1)              {gamma=g1;};
+  void Setalpha0(G4double a0)              {alfa0=a0;};
+  void Setbeta0(G4double b0)              {beta0=b0;};
+  void Setgamma0(G4double g0)              {gamma0=g0;};
   void SetNpdChoice(G4int wybor)       {npd_choice=wybor;};
   void SetNeumann(G4int Neumann)       {neumann=Neumann;};
   void SetBfwhmX(G4double BfwhmX)      {bfwhmx=BfwhmX;};
@@ -57,6 +64,13 @@ public:
 //  void SetParamUpdate() ;
 
 public:
+  int Getgen()           {return gen;};
+  double Getalpha()            {return alfa;};
+  double Getbeta()            {return beta;};
+  double Getgamma()            {return gamma;};
+  double Getalpha0()            {return alfa0;};
+  double Getbeta0()            {return beta0;};
+  double Getgamma0()            {return gamma0;};
   int    GetNpdChoice()   {return npd_choice;};
   int    GetNeumann()     {return neumann;};
   double GetBfwhmX()      {return bfwhmx;};
@@ -191,7 +205,7 @@ public:
  void SetWallCenterYplace(G4double WallYplace) {wallYplace=WallYplace;};
  void SetWallCenterZplace(G4double WallZplace) {wallZplace=WallZplace;};
 private:
- G4int    wallIs, wallVisible, wallN0, wallNCenter, wallNMax;
+ G4int wallIs, wallVisible, wallN0, wallNCenter, wallNMax;
  G4double wallRIn, wallROut, wallDimcX, wallAng0, wallAng, wallholeIn, wallholeOut, wallSepar;
  G4double wallXplace,wallYplace,wallZplace;
 //////////////////////////////
@@ -201,7 +215,7 @@ public:
  void SetWallDimX(G4double WallLDimX)     {wallLdimX=WallLDimX;};
  void SetWallDimY(G4double WallLDimY)     {wallLdimY=WallLDimY;};
  void SetWallDimZ(G4double WallLDimZ)     {wallLdimZ=WallLDimZ;};
- void SetWallNMax(G4int WallNMax)         {wallNMax=WallNMax;};
+ void SetWallNMax(G4int WallNMax)          {wallNMax=WallNMax;};
 // Wall placement
  void SetWallDimS(G4double WallDimS) {walldimS=WallDimS;};
 
@@ -210,16 +224,16 @@ private:
 
  // private:
     G4int aj1bx, aj1by, ajbz, aj1theta, aj2theta, aj1phi, aj2phi, aj1ekin, aja10,
-    	    aja20, aju, ajcs1, ajcs02, aj1r1, aj1r2, npd_choice, neumann, n_elastic, n_bar, n_pipe;
+    	aja20, aju, ajcs1, ajcs02, aj1r1, aj1r2, npd_choice, neumann, n_elastic, n_bar, n_pipe,gen;
     G4double bfwhmx, bfwhmy, eps_separ, bt, pz, pzz, themin, themax, themin2,
-    	       themax2, fimin, fimax, genMin, genMax;
+    	   themax2, fimin, fimax, genMin, genMax,alfa,beta,gamma, alfa0, beta0,gamma0;;
     double dim_mars[3], z_shift, dim_trgt[3], xyz_trgt[3],
-          dim_mwpc1[5], dim_ring[2], xyz_mwpc1[3], dim_mwpc2[4], dim_hole2[2],
-          xyz_mwpc2[3], par_mwpc[5], dim_delta[4], xyz_delta[6], xyz_degrader[3],
-          exit_win_z,  exit_win_th, exit_win_rad, z_pipe, dim_degrader[3];
+      dim_mwpc1[5], dim_ring[2], xyz_mwpc1[3], dim_mwpc2[4], dim_hole2[2],
+      xyz_mwpc2[3], par_mwpc[5], dim_delta[4], xyz_delta[6], xyz_degrader[3],
+      exit_win_z, exit_win_th, exit_win_rad, z_pipe, dim_degrader[3];
 
-     double*  w_eps_separ, *w_z_shift, *w_z_pipe;
-     int *    w_n_bar, *w_n_pipe;
+     double *w_eps_separ, *w_z_shift, *w_z_pipe;
+     int *w_n_bar, *w_n_pipe;
 
   private:
      void Seen(void);			//visualization parameters
@@ -267,10 +281,10 @@ private:
      G4LogicalVolume*   mwpc1_gas_log;  // pointer to the logical MWPC1 gas chamber
      G4VPhysicalVolume* mwpc1_gas_phs;  // pointer to the physical MWPC1 gas chamber
 
-     G4Box*		          mwpc1_wire_plane_mother_sol;
-     G4Tubs*   		      mwpc1_hole_sol;
+     G4Box*		mwpc1_wire_plane_mother_sol;
+     G4Tubs*   		mwpc1_hole_sol;
      G4SubtractionSolid* mwpc1_wire_plane_mother_minus_sol;
-     G4LogicalVolume*	  mwpc1_wire_plane_mother_log[12];
+     G4LogicalVolume*	mwpc1_wire_plane_mother_log[12];
      G4Tubs*            mwpc1_wire_sol;
      G4Tubs*            mwpc1_wire_c_sol[30];
      G4Tubs*            mwpc1_wire_45_sol[150];
@@ -282,9 +296,9 @@ private:
      G4VPhysicalVolume* mwpc1_wire_y_phs[250];
      G4VPhysicalVolume* mwpc1_wire_45_phs[350];
 
-     G4Box*	           	mwpc1_catode_foil_sol;
+     G4Box*		mwpc1_catode_foil_sol;
      G4SubtractionSolid* mwpc1_catode_minus_sol;
-     G4LogicalVolume*	  mwpc1_catode_foil_log;
+     G4LogicalVolume*	mwpc1_catode_foil_log;
      G4VPhysicalVolume* mwpc1_catode_foil_phs[8];
 
      G4Tubs*            mwpc1_ring_sol;  // pointer to the solid MWPC1 vacum hole  (G4double center)
@@ -302,7 +316,7 @@ private:
      G4LogicalVolume*   pipe_log;  // pointer to the logical
      G4VPhysicalVolume* pipe_phs;  // pointer to the physical
 
-     G4Tubs*		        win_scatering_sol;
+     G4Tubs*		win_scatering_sol;
      G4LogicalVolume*   win_scatering_log;
      G4VPhysicalVolume* win_scatering_phs;
 

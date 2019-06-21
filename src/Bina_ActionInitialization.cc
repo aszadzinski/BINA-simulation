@@ -5,19 +5,20 @@
 #include "Bina_SteppingAction.hh"
 #include "Bina_DetectorConstruction.hh"
 #include "Bina_PhysicsList.hh"
-#include "features.hh"
+//#include "features.hh"
 
-Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* DC, Bina_PhysicsList* Physics, MyOMP* mp2) : G4VUserActionInitialization()
+Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* mDC, Bina_PhysicsList* Physics) : G4VUserActionInitialization()
 {
-        mp = mp2;
-        myDC = DC;
-        myPhysics = Physics;
+    myDC = mDC;
+    myPhysics = Physics;
 }
 
 void Bina_ActionInitialization::Build() const
 {
-        SetUserAction(new Bina_PrimaryGeneratorAction(myDC, mp));
-        SetUserAction(new Bina_EventAction(mp));
-        SetUserAction(new Bina_RunAction);
-        SetUserAction(new Bina_SteppingAction(myPhysics));
+    bool rt = true;
+    Bina_EventAction* Evt = new Bina_EventAction(rt);
+    SetUserAction(new Bina_PrimaryGeneratorAction(myDC));
+    SetUserAction(Evt);
+    SetUserAction(new Bina_RunAction(rt));
+    SetUserAction(new Bina_SteppingAction(myPhysics,Evt,rt));
 }

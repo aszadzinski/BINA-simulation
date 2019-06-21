@@ -12,27 +12,31 @@ class G4UIdirectory;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAnInteger;
 
-class Bina_PhysicsMessenger : public G4UImessenger
+class Bina_PhysicsMessenger: public G4UImessenger
 {
-public:
-  Bina_PhysicsMessenger(Bina_PhysicsList* myPhysicsList);
-  ~Bina_PhysicsMessenger();
+
+
+  public:
+   
+Bina_PhysicsMessenger(Bina_PhysicsList* myPhysicsList);
+   ~Bina_PhysicsMessenger();
 
   void SetNewValue(G4UIcommand * command, G4String newValues);
-private:
+  private:
   Bina_PhysicsList* phyList;
   G4UIdirectory*  physicsDir;
   G4UIdirectory*  neutronsDir;
   G4UIdirectory*  fileOutDir;
 
-  //////////////////////////////
-  // Neutron Parameters
-  //////////////////////////////
+//////////////////////////////
+// Neutron Parameters
+//////////////////////////////
 
-  //  G4UIcmdWithAnInteger* NeutronTypeCmd;
+//  G4UIcmdWithAnInteger* NeutronTypeCmd;
   G4UIcmdWithAnInteger* NeutronModelCmd;
   G4UIcmdWithAnInteger* energyBroadeningCmd;
   G4UIcmdWithAnInteger* filesCmd;
 };
 
 #endif
+
