@@ -20,6 +20,7 @@
 ##/vis/modeling/trajectories/drawByCharge-0/default/detDrawStepPts true
 ##/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 3
 #/vis/scene/endOfEventAction accumulate
+<<<<<<< HEAD
 
 #/vis/open OGLIX
 #/vis/drawVolume
@@ -28,5 +29,10 @@
 #/vis/scene/add/hits 
 #/vis/scene/add/trajectories 
 /run/beamOn 1000
+=======
+/run/beamOn 200
+
+/run/beamOn 300
+>>>>>>> MT
 #####wszystkie runy +2
 #/run/beamOn 1
