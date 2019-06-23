@@ -23,7 +23,7 @@ class Bina_DetectorMessenger: public G4UImessenger
    ~Bina_DetectorMessenger();
 
   void SetNewValue(G4UIcommand * command, G4String newValues);
-  
+
   private:
     Bina_DetectorConstruction* myDetector;
 
@@ -43,9 +43,17 @@ class Bina_DetectorMessenger: public G4UImessenger
 //////////////////////////////
 
   G4UIcmdWithAnInteger* NpdChoiceCmd;
+  G4UIcmdWithAnInteger* genCmd;
   G4UIcmdWithAnInteger* IfNeumannCmd;
   G4UIcmdWithAnInteger* NeutronElasticCmd;
   G4UIcmdWithADouble* BfwhmX_Cmd;
+  G4UIcmdWithADouble* alphaCmd;
+  G4UIcmdWithADouble* betaCmd;
+  G4UIcmdWithADouble* gammaCmd;
+  G4UIcmdWithADouble* alpha0Cmd;
+  G4UIcmdWithADouble* beta0Cmd;
+  G4UIcmdWithADouble* gamma0Cmd;
+
   G4UIcmdWithADouble* BfwhmY_Cmd;
   G4UIcmdWithADoubleAndUnit* BtEnergyCmd;
   G4UIcmdWithADouble* Pz_Cmd;
@@ -163,7 +171,7 @@ class Bina_DetectorMessenger: public G4UImessenger
   G4UIcmdWithADoubleAndUnit* WallCenterXplaceCmd;
   G4UIcmdWithADoubleAndUnit* WallCenterYplaceCmd;
   G4UIcmdWithADoubleAndUnit* WallCenterZplaceCmd;
- 
+
 //////////////////////////////
 // Wall E L scintilators
 //////////////////////////////
@@ -176,4 +184,3 @@ class Bina_DetectorMessenger: public G4UImessenger
 };
 
 #endif
-

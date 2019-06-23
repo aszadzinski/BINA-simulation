@@ -9,6 +9,10 @@
 //#include "CLHEP/Random/RandGaussQ.h"
 #include "CLHEP/Random/RandFlat.h"
 #include "CLHEP/Random/Ranlux64Engine.h"
+#include "g4root.hh"
+#include "G4LorentzVector.hh"
+#include <fstream>
+#include <iostream>
 
 
 class Bina_DetectorConstruction;
@@ -106,6 +110,62 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
       return temp;
     };
 
+    inline static double Getb2 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
+    inline static double Getb1 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
+    inline static double Geta1 (double num = 10.0)
+    {
+      static double temp;
+      if (num != 10) temp = num;
+      return temp;
+    };
+
+	inline static double Gett1(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi1(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Gett2(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi2(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Gett3(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+	inline static double Getfi3(double num=10)
+	{
+		static double temp;
+		if (num != 10) temp = num;
+		return temp;
+	}
+
     inline static int GetChoice (int num = 10)
     {
       static int temp;
@@ -114,9 +174,14 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     };
 
   private:
+
+	  G4LorentzVector v41;
+	  G4LorentzVector v42;
+	  G4LorentzVector v43;
     G4ParticleGun* particleGun1;		//proton 1
     G4ParticleGun* particleGun2;		//proton 2
     G4ParticleGun* particleGun3;		//neutron
+	G4ParticleGun* event_cleaner_particle_gun;
     Bina_DetectorConstruction* myDetector;
 
     void RandomInit(int =2);			//generators initialization
@@ -131,7 +196,12 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     void ugelast_read(void);
     void break_read(void);
+    void read_part_momentum(double*);
+    void open_pluto_file();
+    int gen;
+std::ifstream file_Pluto_generator;
 
+	void kinematic(double,int,double*, double, double,double,double,double);
     double gelkin(double,double*,double*);  // elastic kinematics
     double rinterp(double [5][5][5][5], double, double, double, double);
     double cspol(double,double,double,double,double);
@@ -154,7 +224,8 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     double momentum[9]; 		// table whit track momentum
     double vertex[3];			// table whith vertex position
     double p_mass, d_mass, n_mass;	// pointer to particle mass
-
+	double a1,b1,b2;
+	double alpha, beta, gamma,alpha0,beta0,gamma0;
     double x1a[4],x2a[4],x3a[4],x4a[4];
     double x1a_r[4],x2a_r[4],x3a_r[4],x4a_r[4];
     double ya_r[5][5][5][5], yax_r[5][5][5][5];
@@ -167,5 +238,3 @@ class Bina_PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
 #endif
-
-

@@ -5,25 +5,33 @@
 ##       Władysław Nowak         ##
 ##                               ##
 ###################################
-#modifications awilczek
-/param/npd_choice      -3
+#modifications awilczek +aszadzinski
+/param/npd_choice      2
+/param/gen		1
+/param/alpha		85.
+/param/alpha0		10.
+/param/beta		0.
+/param/beta0		180.
+#/param/gamma		1.
+#/param/gamma0		1.
+
 /param/bfwhmx          1.        	# in mm!
 /param/bfwhmy          1.		# in mm!
 /param/bt              130. MeV      #tylko MeV !!
 /param/pz              0.
 /param/pzz             0.
-/param/themin          19.5 deg
-/param/themax          20.5 deg
-/param/the2min         19.5 deg
-/param/the2max         20.5 deg
+/param/themin          2.0 deg
+/param/themax          355.0 deg
+/param/the2min         2.0 deg
+/param/the2max         355.0 deg
 #/param/themin          5.5 deg
 #/param/themax          26. deg
 #/param/the2min         5.5 deg
-#/param/the2max         26. deg
-/param/phimin          0. deg
-/param/phimax          180. deg
+#/param/the2max         180. deg
+/param/phimin          0.0 deg
+/param/phimax          355.0 deg
 #phimax=180. deg dla breakupu
-#zrob jeszcze parametr dla zakresu 
+#zrob jeszcze parametr dla zakresu
 #/param/update
 #tarcza
 /geom/target/is        1
@@ -55,8 +63,8 @@
 /geom/deltae/is        0
 /geom/deltae/dim_x     1.5 cm
 /geom/deltae/dim_y     21.75 cm
-/geom/deltae/dim_z     0.1 cm          
-/geom/deltae/dim_f     0.002 cm          
+/geom/deltae/dim_z     0.1 cm
+/geom/deltae/dim_f     0.002 cm
 /geom/deltae/hole_rOut 5. cm
 /geom/deltae/separ     0.5 mm
 /geom/deltae/n_min     0
