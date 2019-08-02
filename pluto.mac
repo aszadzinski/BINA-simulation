@@ -1,0 +1,12 @@
+{
+
+	int n = 5000000;
+
+	PReaction r2("0.160", "p","d","p p n","output_raw",0,0,0,1);
+
+
+	r2.Print();
+
+	r2.loop(n);
+
+}

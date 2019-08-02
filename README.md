@@ -1,28 +1,31 @@
-# Bina
+# BINA SIMULATION v3.01a
 
----
+~~It isn't main branch~~. App provides 3-body breakup simulation with (SSA) (others rections in previous version v2.11)
 
-## Required Geant4 flags
+## INSTALLATION
 
-- `GEANT4_BUILD_MULTITHREADED` - optional
-- `GEANT4_INSTALL_DATA``
+### building pragram
 
-## External Libraries
+- `mkdir build`
+- `cmake -DGeant4_Dir=<path to geant4 install dir> ../`
+- `make -j<threads>`
 
-- [boost]()
-- [OpenMP]()
-- [MPI]()
+## RUN
 
----
+### pluto
+- `root .l pluto.mac (need to set pluto_path) `
+- `./pluto_convert`
+- `./bina_run`
 
-## TODO
+or
 
-- [ ] openMP for primarygenerator
-- [ ] mpi test
-- [ ] parallel step,gran
-- [ ] Benchmark
-- [ ] config
+- `auto`
 
-- [ ]  webui
-- [ ] parallel DC init
-- [ ] Qt
+### SSA(\param/gen 1)
+
+- just `./bina_run`
+
+
+## Params
+
+Main parameters can be found in geo.mac
