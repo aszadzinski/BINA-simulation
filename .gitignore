@@ -1,3 +1,4 @@
+Dockerfile/ToPublic/build
 build*/
 *.swp
 *.cache
