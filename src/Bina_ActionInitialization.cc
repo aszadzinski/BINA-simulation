@@ -7,17 +7,16 @@
 #include "Bina_PhysicsList.hh"
 #include "features.hh"
 
-Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* DC, Bina_PhysicsList* Physics, MyOMP* mp2) : G4VUserActionInitialization()
+Bina_ActionInitialization::Bina_ActionInitialization(Bina_DetectorConstruction* DC, Bina_PhysicsList* Physics) : G4VUserActionInitialization()
 {
-        mp = mp2;
         myDC = DC;
         myPhysics = Physics;
 }
 
 void Bina_ActionInitialization::Build() const
 {
-        SetUserAction(new Bina_PrimaryGeneratorAction(myDC, mp));
-        SetUserAction(new Bina_EventAction(mp));
+        SetUserAction(new Bina_PrimaryGeneratorAction(myDC));
+        SetUserAction(new Bina_EventAction());
         SetUserAction(new Bina_RunAction);
         SetUserAction(new Bina_SteppingAction(myPhysics));
 }

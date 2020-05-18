@@ -5,11 +5,7 @@
 #include "Bina_EventAction.hh"
 #include "Bina_SteppingAction.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
 #include "G4RunManager.hh"
-#endif
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -27,20 +23,11 @@
 
 int main(int argc,char** argv)
 {
-        MyOMP* mp = new MyOMP;
-        mp->threads_num = 3;
 
         Bina_DetectorConstruction* Bina_detector = new Bina_DetectorConstruction;
         Bina_PhysicsList* Bina_physics=new Bina_PhysicsList;
 
-#ifdef G4MULTITHREADED
-        G4MTRunManager* runManager = new G4MTRunManager;
-	runManager->SetNumberOfThreads(1);
-        mp->ompON = false;
-#else
         G4RunManager * runManager = new G4RunManager;
-        mp->ompON  = true;
-#endif
         runManager->SetUserInitialization(Bina_detector);
         runManager->SetUserInitialization(Bina_physics);
 
@@ -58,7 +45,7 @@ int main(int argc,char** argv)
                         G4cout<<"\n\t Dodano domyslny plik z geometria GEO.MAC\n";
                         UI->ApplyCommand(command+fileInp);
                 }
-                runManager->SetUserInitialization(new Bina_ActionInitialization(Bina_detector,Bina_physics, mp));
+                runManager->SetUserInitialization(new Bina_ActionInitialization(Bina_detector,Bina_physics));
 #ifdef G4VIS_USE
 //G4VisManager* visManager = new Bina_VisManager;
                 G4VisManager* visManager = new G4VisExecutive;

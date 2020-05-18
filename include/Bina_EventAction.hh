@@ -6,18 +6,16 @@
 #include "globals.hh"
 #include <omp.h>
 
-struct MyOMP;
 
 class Bina_EventAction : public G4UserEventAction
 {
         public:
-        Bina_EventAction(MyOMP*);
+        Bina_EventAction();
         virtual ~Bina_EventAction();
 
 public:
         virtual void BeginOfEventAction(const G4Event*);
         virtual void   EndOfEventAction(const G4Event*);
-        MyOMP* mp;
 
 inline static int getNb(int num = -1 )
 {

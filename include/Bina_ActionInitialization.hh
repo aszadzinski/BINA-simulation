@@ -6,15 +6,13 @@
 #include "Bina_PhysicsList.hh"
 
 /// Action initialization class.
-struct MyOMP;
 class Bina_ActionInitialization : public G4VUserActionInitialization
 {
 public:
-Bina_ActionInitialization(Bina_DetectorConstruction*, Bina_PhysicsList*, MyOMP*);
+Bina_ActionInitialization(Bina_DetectorConstruction*, Bina_PhysicsList*);
 
 Bina_DetectorConstruction*  myDC;
 Bina_PhysicsList*           myPhysics;
-MyOMP*                      mp;
 
 virtual void Build() const;
 };

@@ -19,9 +19,8 @@
 //#include <omp.h>
 //#include <unistd.h>
 
-Bina_EventAction::Bina_EventAction(MyOMP* mp2)
+Bina_EventAction::Bina_EventAction()
 {
-        mp = mp2;
 }
 
 Bina_EventAction::~Bina_EventAction()
@@ -35,10 +34,6 @@ void Bina_EventAction::BeginOfEventAction(const G4Event* evt)
         getNb(evtNb);
         if (!(evtNb%100))
         {
-                if(mp->ompON)
-                {
-                        G4cout<<"(omp)("<<mp->threads_num<<")";
-                }
                 G4cout << "\n--> Begin of event: " << evtNb <<G4endl;
         }
 }

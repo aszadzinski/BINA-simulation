@@ -23,25 +23,25 @@ Bina_RunAction::~Bina_RunAction()
 
 void Bina_RunAction::BeginOfRunAction(const G4Run*)
 {
-        time1 = omp_get_wtime();
-	G4cout<<"t1= "<< time1<<G4endl;
+ //       time1 = omp_get_wtime();
+//	G4cout<<"t1= "<< time1<<G4endl;
 }
 
 void Bina_RunAction::EndOfRunAction(const G4Run* run)
 {
-        time2 = omp_get_wtime();
-	float time3 = time2-time1;
-       	G4cout<<"RA= "<<time3<<G4endl;
+ //       time2 = omp_get_wtime();
+//	float time3 = time2-time1;
+  //     	G4cout<<"RA= "<<time3<<G4endl;
 
-	std::string tid = std::to_string(G4Threading::G4GetThreadId()) + ".txt";
+//	std::string tid = std::to_string(G4Threading::G4GetThreadId()) + ".txt";
 
-    std::fstream file;
-    file.open(tid, std::ios::out | std::ios::app);
-    if( file.good() == true )
-    {
-	    
-	    file << time3;
-	    file<<"\n";
-        file.close();
-    }
+   // std::fstream file;
+   // file.open(tid, std::ios::out | std::ios::app);
+   // if( file.good() == true )
+   // {
+//	    
+//	    file << time3;
+//	    file<<"\n";
+  //      file.close();
+   // }
 }

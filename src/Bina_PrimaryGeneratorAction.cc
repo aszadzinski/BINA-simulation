@@ -21,7 +21,7 @@
 #endif
 #include <iostream>
 
-#include <omp.h>
+
 #include "features.hh"
 //fstream filell;
 //int chooser=0;
@@ -33,7 +33,7 @@ double step[4] = {2.0, 2.0, 15.0,0.002};
 double offs[4] = {5.0, 5.0, 0.0, 0.0};
 
 
-Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstruction* myDC, MyOMP* mp2)
+Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstruction* myDC)
         : myDetector(myDC)
 {
 #include "Bina_Detector.cfg"
@@ -62,9 +62,7 @@ Bina_PrimaryGeneratorAction::Bina_PrimaryGeneratorAction(Bina_DetectorConstructi
         t1  = 0.;   t2  = 0.;   t3  = 0.;
         fi1 = 0.;             fi2 = 0.;   fi3 = 0.;
         bt /=1000.;
-        mp = mp2;
-        enable_omp = mp2->ompON;
-        set_threads(mp->threads_num);
+
 
         RandomInit();
 
@@ -152,16 +150,16 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1);
                 GetStartAnglePhi(fi1);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-//#pragma omp parallel shared(particleGun1)  //strata +- 5%
-//#pragma omp sections
+////pgm omp parallel shared(particleGun1)  //strata +- 5%
+////pgm omp sections
 //{
-//#pragma omp section
+////pgm omp section
 //{
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
-//#pragma omp section
+////pgm omp section
 //{
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
-//#pragma omp section
+////pgm omp section
 //{
                 particleGun1->SetParticleEnergy(bt*CLHEP::GeV);//}
 //}
@@ -180,17 +178,17 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAnglePhi(fi1,fi2);
 
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-#pragma omp parallel if(mp->threads_num)
+//pgm omp parallel if(mp->threads_num)
 {
-#pragma omp sections
+//pgm omp sections
                 {
-#pragma omp section
+//pgm omp section
                         {
                                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
                                 particleGun1->SetParticleEnergy(bt*CLHEP::GeV);
                                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
                         }
-#pragma omp section
+//pgm omp section
                         {
                                 particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
                                 particleGun2->SetParticleEnergy(bt*CLHEP::GeV);
@@ -198,8 +196,8 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                         }
 
                 }
-#pragma omp barrier
-#pragma omp single
+//pgm omp barrier
+//pgm omp single
         {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
@@ -217,25 +215,25 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1,t2);
                 GetStartAnglePhi(fi1,fi2);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-#pragma omp parallel if(mp->threads_num)
+//pgm omp parallel if(mp->threads_num)
 {
-#pragma omp sections
+//pgm omp sections
                 {
-#pragma omp section
+//pgm omp section
                         {
                                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
                                 particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
                                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
                         }
-#pragma omp section
+//pgm omp section
                         {
                                 particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
                                 particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
                                 particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
                         }
                 }
-#pragma omp barrier
-#pragma omp single
+//pgm omp barrier
+//pgm omp single
                 {
                         particleGun1->GeneratePrimaryVertex(anEvent);
                         particleGun2->GeneratePrimaryVertex(anEvent);
@@ -254,24 +252,24 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 GetStartAngleTheta(t1,t2,t3);
                 GetStartAnglePhi(fi1,fi2,fi3);
                 GetStartPosition(vertex[0],vertex[1],vertex[2]);
-#pragma omp parallel if(mp->threads_num)
+//pgm omp parallel if(mp->threads_num)
 {
-#pragma omp sections
+//pgm omp sections
         {
-#pragma omp section
+//pgm omp section
                 {
                 particleGun1->SetParticleMomentumDirection(G4ThreeVector(momentum[0],momentum[1],momentum[2]));
                 particleGun1->SetParticleEnergy(bt1*CLHEP::GeV);
                 particleGun1->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
                 }
 
-#pragma omp section
+//pgm omp section
                 {
                 particleGun2->SetParticlePosition(G4ThreeVector(vertex[0],vertex[1],vertex[2]));
                 particleGun2->SetParticleEnergy(bt2*CLHEP::GeV);
                 particleGun2->SetParticleMomentumDirection(G4ThreeVector(momentum[3],momentum[4],momentum[5]));
                 }
-#pragma omp section
+//pgm omp section
                 {
                 particleGun3->SetParticleMomentumDirection(G4ThreeVector(momentum[6],momentum[7],momentum[8]));
                 particleGun3->SetParticleEnergy(bt3*CLHEP::GeV);
@@ -279,8 +277,8 @@ void Bina_PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                 }
 
         }
-#pragma omp barrier
-#pragma omp single
+//pgm omp barrier
+//pgm omp single
         {
                 particleGun1->GeneratePrimaryVertex(anEvent);
                 particleGun2->GeneratePrimaryVertex(anEvent);
@@ -726,7 +724,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
 //      filell<<"theta1 theta2 phi12 e1_0 niedergeschrievven\n";
 //filell<<"=== "<<x0[0]<<' '<<x0[1]<<' '<<x0[2]<<' '<<x0[3]<<G4endl;
-#pragma omp parallel for schedule(static,1)  //+7%
+//pgm omp parallel for schedule(static,1)  //+7%
                         for (i=0; i<4; i++)
                         {
                                 ind[i] = max(int((x0[i]-offs[i])/step[i]),1);
@@ -749,7 +747,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 
 // interpolations
 //   - of 'unpolarized' cross section
-#pragma omp parallel for schedule(static,1)
+//pgm omp parallel for schedule(static,1)
                         for(i=0; i<4; i++)
                         {
                                 for(j=0; j<4; j++)
@@ -820,7 +818,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
 //   - of analysing powers
                         if((pzz != 0)&&(pzz != 0))
                         {
-#pragma omp parallel for schedule(static, 1)
+//pgm omp parallel for schedule(static, 1)
                                 for(i=0; i<4; i++)
                                 {
                                         for(j=0; j<4; j++)
@@ -903,7 +901,7 @@ double* Bina_PrimaryGeneratorAction::ugbreak(double* ptot)
                         e1_2=e1_0;
                         signum=1;
 //     filell<<e1_0<<' '<<e2_0<<' '<<s<<' '<<icnn<<G4endl;
-#pragma omp parallel for schedule(static,1)
+//pgm omp parallel for schedule(static,1)
                         for (int switcher=0; switcher<=2; switcher++) {
                                 if(switcher==2)
                                 {
@@ -1608,12 +1606,12 @@ void Bina_PrimaryGeneratorAction::break_read(void)
         }
         ith1 = 0;
         ok = 1;
-//#pragma omp parallel for schedule(static,1) firstprivate(ok)
+////pgm omp parallel for schedule(static,1) firstprivate(ok)
         for (l=0; l<4; l++)
         {ok=1;
 
          do
-         {//#pragma omp critical
+         {////pgm omp critical
                  for(k=0; k<14; k++)
                  {
 
@@ -1626,8 +1624,8 @@ void Bina_PrimaryGeneratorAction::break_read(void)
                                  file[l]>>ns;
 
                                  if(!file[l].eof()) {
-                                // #pragma omp parallel
-                                // #pragma omp for schedule(static,1) private()
+                                // //pgm omp parallel
+                                // //pgm omp for schedule(static,1) private()
                                  for (i=0; i<ns; i++)
                                  {
                                          file[l] >> sig[ith1][k][j][i] >> ayn[ith1][k][j][i] >> ayd[ith1][k][j][i]
@@ -1657,15 +1655,4 @@ void Bina_PrimaryGeneratorAction::break_read(void)
         csmax*=1.5;
 }
 
-void Bina_PrimaryGeneratorAction::set_threads(int n)
-{
-        if(enable_omp)
-        {
-                threads_num = n;
-                omp_set_num_threads(threads_num);
-        }
-        else
-        {
-                omp_set_num_threads(1);
-        }
-}
+
